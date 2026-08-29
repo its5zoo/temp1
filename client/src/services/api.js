@@ -46,6 +46,18 @@ export const createFacultyPortalNotice = (payload) => API.post('/faculty/notices
 export const getFacultyPortalMessages = () => API.get('/faculty/messages');
 export const replyFacultyPortalMessage = (payload) => API.post('/faculty/messages/reply', payload);
 
+// --- Student Portal Suite Endpoints ---
+export const getStudentPortalOverview = () => API.get('/student/overview');
+export const getStudentPortalCourses = () => API.get('/student/courses');
+export const getStudentPortalResults = () => API.get('/student/results');
+export const getStudentPortalTimetable = () => API.get('/student/timetable');
+export const getStudentPortalAttendance = () => API.get('/student/attendance');
+export const getStudentPortalFees = () => API.get('/student/fees');
+export const payStudentPortalFee = (payload) => API.post('/student/fees/pay', payload);
+export const submitStudentFacultyFeedback = (payload) => API.post('/student/feedback', payload);
+export const getStudentPortalDoubts = () => API.get('/student/doubts');
+export const createStudentPortalDoubt = (payload) => API.post('/student/doubts', payload);
+
 // --- Legacy & Other Dashboards ---
 export const getHODStats = () => API.get('/dashboard/hod/stats');
 export const getFacultyRoster = () => API.get('/dashboard/hod/roster');
@@ -56,4 +68,5 @@ export const submitFeedback = (payload) => API.post('/dashboard/feedback', paylo
 // --- Users ---
 export const getAllUsers = () => API.get('/users');
 export const getFacultyProfile = (id) => API.get(`/users/${id}`);
+
 

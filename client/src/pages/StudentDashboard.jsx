@@ -1,78 +1,214 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import StudentHome from '../components/student/StudentHome';
-import MySubjects from '../components/student/MySubjects';
-import CareerPath from '../components/student/CareerPath';
-import AcademicCopilot from '../components/student/AcademicCopilot';
-import CampusHub from '../components/student/CampusHub';
-import StudentServices from '../components/student/StudentServices';
-import AttendanceMeter from '../components/dashboard/AttendanceMeter';
-import FeedbackForm from '../components/dashboard/FeedbackForm';
-import { submitFeedback } from '../services/api';
+import { 
+  RefreshCw, 
+  GraduationCap 
+} from 'lucide-react';
+import StudentOverviewTab from '../components/student/StudentOverviewTab';
+import StudentCoursesTab from '../components/student/StudentCoursesTab';
+import StudentResultsTab from '../components/student/StudentResultsTab';
+import StudentTimetableTab from '../components/student/StudentTimetableTab';
+import StudentAttendanceTab from '../components/student/StudentAttendanceTab';
+import StudentFeesTab from '../components/student/StudentFeesTab';
+import StudentFeedbackTab from '../components/student/StudentFeedbackTab';
+import StudentDoubtsTab from '../components/student/StudentDoubtsTab';
+import { 
+  getStudentPortalOverview, 
+  getStudentPortalCourses, 
+  getStudentPortalResults, 
+  getStudentPortalTimetable, 
+  getStudentPortalAttendance, 
+  getStudentPortalFees, 
+  payStudentPortalFee, 
+  submitStudentFacultyFeedback, 
+  getStudentPortalDoubts, 
+  createStudentPortalDoubt 
+} from '../services/api';
 
-export default function StudentDashboard() {
+export default function StudentDashboard({ initialTab = 'dashboard' }) {
   const { user } = useAuth();
-  const [activeTab, setActiveTab] = useState('home');
+  const location = useLocation();
+  const navigate = useNavigate();
 
-  const attendance = 75;
-  const TOTAL_CLASSES = 40;
-  const attended = (attendance / 100) * TOTAL_CLASSES;
-  const classesNeeded = attendance < 80 ? Math.ceil((0.8 * TOTAL_CLASSES - attended) / 0.2) : 0;
+  const searchParams = new URLSearchParams(location.search);
+  const tabFromUrl = searchParams.get('tab');
+  const [activeTab, setActiveTab] = useState(tabFromUrl || initialTab || 'dashboard');
 
-  const tabs = [
-    { id: 'home', label: 'Home Overview' },
-    { id: 'attendance', label: 'Attendance & Standing' },
-    { id: 'feedback', label: 'Rate Faculty' },
-    { id: 'subjects', label: 'My Subjects' },
-    { id: 'hub', label: 'Campus Hub' },
-    { id: 'career', label: 'Career & Skills' },
-    { id: 'copilot', label: 'AI Copilot' },
-    { id: 'services', label: 'Student Services' },
-  ];
+  const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+  const [overviewData, setOverviewData] = useState(null);
+  const [courses, setCourses] = useState([]);
+  const [resultsData, setResultsData] = useState(null);
+  const [timetable, setTimetable] = useState([]);
+  const [attendanceData, setAttendanceData] = useState(null);
+  const [feesData, setFeesData] = useState(null);
+  const [doubts, setDoubts] = useState([]);
+
+  useEffect(() => {
+    if (tabFromUrl && tabFromUrl !== activeTab) {
+      setActiveTab(tabFromUrl);
+    }
+  }, [tabFromUrl]);
+
+  const handleTabChange = (tabId) => {
+    setActiveTab(tabId);
+    navigate(`/dashboard?tab=${tabId}`);
+  };
+
+  const fetchStudentData = async (isManual = false) => {
+    if (isManual) setRefreshing(true);
+    else setLoading(true);
+
+    try {
+      const [overRes, crsRes, resRes, timeRes, attRes, feeRes, dbtRes] = await Promise.allSettled([
+        getStudentPortalOverview(),
+        getStudentPortalCourses(),
+        getStudentPortalResults(),
+        getStudentPortalTimetable(),
+        getStudentPortalAttendance(),
+        getStudentPortalFees(),
+        getStudentPortalDoubts()
+      ]);
+
+      if (overRes.status === 'fulfilled') setOverviewData(overRes.value.data);
+      if (crsRes.status === 'fulfilled') setCourses(crsRes.value.data.courses || []);
+      if (resRes.status === 'fulfilled') setResultsData(resRes.value.data);
+      if (timeRes.status === 'fulfilled') setTimetable(timeRes.value.data.timetable || []);
+      if (attRes.status === 'fulfilled') setAttendanceData(attRes.value.data);
+      if (feeRes.status === 'fulfilled') setFeesData(feeRes.value.data.fees);
+      if (dbtRes.status === 'fulfilled') setDoubts(dbtRes.value.data.doubts || []);
+    } catch (err) {
+      console.error('Error fetching student portal data:', err);
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchStudentData();
+  }, []);
+
+  const handlePayFee = async (amount) => {
+    try {
+      const res = await payStudentPortalFee({ amount });
+      if (res.data?.fees) {
+        setFeesData(res.data.fees);
+      }
+      fetchStudentData(true);
+    } catch (err) {
+      console.error('Error paying fee:', err);
+    }
+  };
+
+  const handleSubmitFeedback = async (payload) => {
+    try {
+      await submitStudentFacultyFeedback(payload);
+    } catch (err) {
+      console.error('Error submitting feedback:', err);
+    }
+  };
+
+  const handleCreateDoubt = async (payload) => {
+    try {
+      const res = await createStudentPortalDoubt(payload);
+      if (res.data?.doubt) {
+        setDoubts(prev => [res.data.doubt, ...prev]);
+      }
+    } catch (err) {
+      console.error('Error creating doubt:', err);
+    }
+  };
 
   return (
-    <div className="flex flex-col min-h-screen bg-slate-50">
-      {/* Tab Navigation */}
-      <div className="bg-white border-b px-6 flex gap-6 shrink-0 overflow-x-auto whitespace-nowrap sticky top-0 z-10">
-        {tabs.map((tab) => {
-          const isActive = activeTab === tab.id;
-          return (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`py-4 px-2 text-sm font-medium border-b-2 transition-colors ${
-                isActive
-                  ? 'border-indigo-600 text-indigo-700 font-semibold'
-                  : 'border-transparent text-slate-500 hover:text-slate-800 hover:border-slate-300'
-              }`}
-            >
-              {tab.label}
-            </button>
-          );
-        })}
+    <div className="dashboard-content max-w-7xl mx-auto space-y-6 pb-12">
+      {/* Top Header */}
+      <div className="print-hide flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-200 shadow-2xs">
+        <div>
+          <div className="flex items-center gap-2">
+            <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">
+              Student Academic Portal
+            </h1>
+            <span className="px-2.5 py-0.5 rounded-md text-xs font-semibold bg-slate-100 text-slate-900 border border-slate-300">
+              Semester 5 B.Tech CSE
+            </span>
+          </div>
+          <p className="text-xs text-slate-500 mt-1">
+            Welcome back, <strong className="text-slate-900">{user?.name || 'Aarav Sharma'}</strong> (Roll No: 2024CS101). Monitor academic marks, CGPA, 80% attendance criteria, timetable, fees & faculty feedback.
+          </p>
+        </div>
+
+        <button
+          onClick={() => fetchStudentData(true)}
+          disabled={refreshing}
+          className="flex items-center gap-2 px-4 py-2 bg-white hover:bg-slate-100 text-slate-900 border border-slate-300 rounded-xl text-xs font-bold transition-all shadow-2xs cursor-pointer self-start md:self-auto disabled:opacity-50"
+        >
+          <RefreshCw size={13} className={refreshing ? 'animate-spin text-slate-700' : 'text-slate-600'} />
+          <span>{refreshing ? 'Refreshing...' : 'Refresh Academic Feed'}</span>
+        </button>
       </div>
 
-      {/* Tab Content */}
-      <div className="flex-1 p-6 md:p-8">
-        <div className="max-w-6xl mx-auto space-y-6">
-          {activeTab === 'home' && <StudentHome isEmpty={false} userName={user?.name || 'Alex'} />}
-          {activeTab === 'attendance' && (
-            <div className="space-y-6">
-              <AttendanceMeter attendance={attendance} classesNeeded={classesNeeded} />
-            </div>
-          )}
-          {activeTab === 'feedback' && (
-            <div className="max-w-2xl mx-auto">
-              <FeedbackForm onSubmit={submitFeedback} />
-            </div>
-          )}
-          {activeTab === 'subjects' && <MySubjects isEmpty={false} />}
-          {activeTab === 'hub' && <CampusHub />}
-          {activeTab === 'career' && <CareerPath isEmpty={false} />}
-          {activeTab === 'copilot' && <AcademicCopilot />}
-          {activeTab === 'services' && <StudentServices />}
+      {/* Main Tab Rendering */}
+      {loading ? (
+        <div className="flex flex-col items-center justify-center py-20 bg-white rounded-2xl border border-slate-200 shadow-2xs">
+          <RefreshCw size={24} className="animate-spin text-slate-700 mb-3" />
+          <p className="text-xs text-slate-500 font-semibold">Loading Student Academic Records...</p>
         </div>
-      </div>
+      ) : (
+        <div>
+          {activeTab === 'dashboard' && (
+            <StudentOverviewTab 
+              overviewData={overviewData} 
+              setActiveTab={handleTabChange} 
+            />
+          )}
+
+          {activeTab === 'courses' && (
+            <StudentCoursesTab 
+              courses={courses} 
+            />
+          )}
+
+          {activeTab === 'results' && (
+            <StudentResultsTab 
+              resultsData={resultsData} 
+            />
+          )}
+
+          {activeTab === 'timetable' && (
+            <StudentTimetableTab 
+              timetable={timetable} 
+            />
+          )}
+
+          {activeTab === 'attendance' && (
+            <StudentAttendanceTab 
+              attendanceData={attendanceData} 
+            />
+          )}
+
+          {activeTab === 'fees' && (
+            <StudentFeesTab 
+              feesData={feesData} 
+              onPayFee={handlePayFee} 
+            />
+          )}
+
+          {activeTab === 'feedback' && (
+            <StudentFeedbackTab 
+              onSubmitFeedback={handleSubmitFeedback} 
+            />
+          )}
+
+          {activeTab === 'support' && (
+            <StudentDoubtsTab 
+              doubts={doubts} 
+              onCreateDoubt={handleCreateDoubt} 
+            />
+          )}
+        </div>
+      )}
     </div>
   );
 }

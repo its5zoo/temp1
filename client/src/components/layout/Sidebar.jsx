@@ -17,7 +17,9 @@ import {
   GraduationCap,
   Calendar,
   FileText,
-  Bell
+  Bell,
+  Star,
+  CreditCard
 } from 'lucide-react';
 import './Sidebar.css';
 
@@ -102,14 +104,33 @@ const FACULTY_SECTIONS = [
   }
 ];
 
+const STUDENT_SECTIONS = [
+  {
+    title: 'Academic Overview',
+    items: [
+      { label: 'Dashboard', path: '/dashboard?tab=dashboard', tab: 'dashboard', icon: LayoutDashboard },
+    ]
+  },
+  {
+    title: 'Curriculum & Records',
+    items: [
+      { label: 'My Courses', path: '/dashboard?tab=courses', tab: 'courses', icon: BookOpen },
+      { label: 'Results & Marks', path: '/dashboard?tab=results', tab: 'results', icon: TrendingUp },
+      { label: 'Timetable', path: '/dashboard?tab=timetable', tab: 'timetable', icon: Calendar },
+      { label: 'Attendance (80%)', path: '/dashboard?tab=attendance', tab: 'attendance', icon: ClipboardCheck },
+    ]
+  },
+  {
+    title: 'Finances & Support',
+    items: [
+      { label: 'Fees & Accounts', path: '/dashboard?tab=fees', tab: 'fees', icon: CreditCard },
+      { label: 'Faculty Feedback', path: '/dashboard?tab=feedback', tab: 'feedback', icon: Star },
+      { label: 'Doubts & AI Copilot', path: '/dashboard?tab=support', tab: 'support', icon: MessageSquare },
+    ]
+  }
+];
+
 const OTHER_ROLE_ITEMS = {
-  student: [
-    { label: 'My Learning', path: '/dashboard', icon: LayoutDashboard },
-    { label: 'Courses & Subjects', path: '/dashboard/courses', icon: BookOpen },
-    { label: 'Doubts Center', path: '/dashboard/messages', icon: MessageSquare },
-    { label: 'Faculty Directory', path: '/dashboard/users', icon: Users },
-    { label: 'Settings', path: '/dashboard/settings', icon: Settings },
-  ],
   admin: [
     { label: 'Admin Controls', path: '/dashboard', icon: LayoutDashboard },
     { label: 'User Directory', path: '/dashboard/users', icon: Users },
@@ -135,9 +156,10 @@ export default function Sidebar() {
   const isHOD = userRole === 'hod' || !userRole;
   const isAdvisor = userRole === 'advisor';
   const isFaculty = userRole === 'adjunct_faculty' || userRole === 'faculty';
+  const isStudent = userRole === 'student';
 
   const isItemActive = (item) => {
-    if (isAdvisor || isFaculty) {
+    if (isAdvisor || isFaculty || isStudent) {
       if (item.tab) {
         if (!currentTab && item.tab === 'dashboard') return true;
         return currentTab === item.tab;
@@ -238,11 +260,33 @@ export default function Sidebar() {
               </div>
             </div>
           ))
+        ) : isStudent ? (
+          STUDENT_SECTIONS.map((section, sIdx) => (
+            <div key={sIdx} className="nav-section">
+              <div className="section-header">{section.title}</div>
+              <div className="section-items">
+                {section.items.map((item) => {
+                  const Icon = item.icon;
+                  const active = isItemActive(item);
+                  return (
+                    <button
+                      key={item.label}
+                      className={`nav-item ${active ? 'active' : ''}`}
+                      onClick={() => handleNavigate(item)}
+                    >
+                      {Icon && <Icon size={16} className="nav-icon shrink-0" />}
+                      <span className="truncate">{item.label}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          ))
         ) : (
           <div className="nav-section">
             <div className="section-header">Navigation</div>
             <div className="section-items">
-              {(OTHER_ROLE_ITEMS[userRole] || OTHER_ROLE_ITEMS.admin).map((item) => {
+              {OTHER_ROLE_ITEMS.admin.map((item) => {
                 const Icon = item.icon;
                 const active = location.pathname === item.path;
                 return (
@@ -267,7 +311,7 @@ export default function Sidebar() {
         <div className="user-info">
           <p className="user-name">{user?.name || 'User'}</p>
           <p className="user-role">
-            {isHOD ? 'Department Chair' : isAdvisor ? 'Academic Advisor' : isFaculty ? 'Adjunct Faculty (Trainer)' : user?.role ? user.role.replace('_', ' ') : 'Faculty'}
+            {isHOD ? 'Department Chair' : isAdvisor ? 'Academic Advisor' : isFaculty ? 'Adjunct Faculty (Trainer)' : isStudent ? 'B.Tech Student (Sem 5)' : user?.role ? user.role.replace('_', ' ') : 'User'}
           </p>
         </div>
         <button className="logout-btn" onClick={handleLogout} title="Logout">
