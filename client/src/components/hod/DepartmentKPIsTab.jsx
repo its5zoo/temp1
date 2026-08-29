@@ -7,7 +7,9 @@ import {
   DollarSign, 
   ChevronRight,
   RefreshCw,
-  Building2
+  Building2,
+  TrendingUp,
+  ShieldCheck
 } from 'lucide-react';
 
 export default function DepartmentKPIsTab({ overviewData, setActiveTab, onRefresh }) {
@@ -28,30 +30,30 @@ export default function DepartmentKPIsTab({ overviewData, setActiveTab, onRefres
   const hoursPercent = Math.round((budget.hoursLoggedThisMonth / budget.hoursAllocatedCap) * 100);
 
   return (
-    <div className="space-y-5">
-      {/* Top Academic Unit Header */}
-      <div className="bg-white rounded-xl p-5 border border-slate-200 shadow-2xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div className="space-y-6">
+      {/* Academic Unit Header */}
+      <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-2xs flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <div className="flex items-center gap-2">
-            <span className="p-1.5 rounded-lg bg-slate-100 text-slate-800 border border-slate-200">
-              <Building2 size={16} />
+          <div className="flex items-center gap-3">
+            <span className="p-2.5 rounded-xl bg-slate-900 text-white font-bold text-sm flex items-center justify-center">
+              <Building2 size={20} />
             </span>
-            <h2 className="text-base font-bold text-slate-900">
+            <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">
               {department?.name || 'Department of Computer Science & Engineering'}
-            </h2>
+            </h1>
           </div>
-          <p className="text-xs text-slate-500 mt-1">
-            Chair: <strong className="text-slate-800">{department?.hodName || 'Dr. Alan Smith'}</strong> • Academic Period: <strong className="text-slate-800">{selectedSemester}</strong>
+          <p className="text-sm text-slate-500 mt-1">
+            Chair: <strong className="text-slate-900">{department?.hodName || 'Dr. Alan Smith'}</strong> • Academic Period: <strong className="text-slate-900">{selectedSemester}</strong>
           </p>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex flex-wrap items-center gap-3">
           <select 
             value={selectedSemester}
             onChange={(e) => setSelectedSemester(e.target.value)}
-            className="bg-slate-50 text-slate-900 text-xs font-medium border border-slate-200 rounded-lg px-3 py-1.5 outline-none focus:border-slate-800"
+            className="bg-slate-50 text-slate-900 text-sm font-semibold border border-slate-200 rounded-xl px-4 py-2.5 outline-none focus:border-slate-900 cursor-pointer"
           >
-            <option value="Fall 2026">Fall 2026 (Active)</option>
+            <option value="Fall 2026">Fall 2026 (Active Term)</option>
             <option value="Spring 2026">Spring 2026</option>
             <option value="Fall 2025">Fall 2025</option>
           </select>
@@ -59,7 +61,7 @@ export default function DepartmentKPIsTab({ overviewData, setActiveTab, onRefres
           <select 
             value={selectedDept}
             onChange={(e) => setSelectedDept(e.target.value)}
-            className="bg-slate-50 text-slate-900 text-xs font-medium border border-slate-200 rounded-lg px-3 py-1.5 outline-none focus:border-slate-800"
+            className="bg-slate-50 text-slate-900 text-sm font-semibold border border-slate-200 rounded-xl px-4 py-2.5 outline-none focus:border-slate-900 cursor-pointer"
           >
             <option value="all">All Specializations</option>
             <option value="cs">Core Computer Science</option>
@@ -69,22 +71,22 @@ export default function DepartmentKPIsTab({ overviewData, setActiveTab, onRefres
         </div>
       </div>
 
-      {/* 4-Column Primary KPI Grid - High Contrast Black & White */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      {/* 4 Primary KPI Metric Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
         {/* Total Faculty */}
-        <div className="bg-white rounded-xl p-5 border border-slate-200 shadow-2xs flex flex-col justify-between">
+        <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-2xs hover:shadow-md hover:border-slate-300 transition-all flex flex-col justify-between">
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Faculty Roster</span>
-            <div className="w-8 h-8 rounded-lg bg-slate-100 text-slate-800 border border-slate-200 flex items-center justify-center">
-              <Users size={16} />
+            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Faculty Roster</span>
+            <div className="w-10 h-10 rounded-xl bg-slate-100 text-slate-900 border border-slate-200 flex items-center justify-center">
+              <Users size={18} />
             </div>
           </div>
-          <div className="mt-3">
-            <div className="flex items-baseline gap-2">
-              <span className="text-2xl font-bold text-slate-900">{kpis?.totalFaculty || 18}</span>
-              <span className="text-[11px] font-medium text-slate-600 bg-slate-100 border border-slate-200 px-1.5 py-0.2 rounded">+2 this term</span>
+          <div className="mt-4">
+            <div className="flex items-baseline gap-2.5">
+              <span className="text-3xl font-black text-slate-900">{kpis?.totalFaculty || 18}</span>
+              <span className="text-xs font-bold text-slate-700 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded-md">+2 Term</span>
             </div>
-            <div className="mt-3 flex items-center justify-between text-xs text-slate-500 pt-2.5 border-t border-slate-100">
+            <div className="mt-4 flex items-center justify-between text-xs text-slate-500 pt-3 border-t border-slate-100 font-medium">
               <span><strong>{kpis?.fullTimeCount || 12}</strong> Full-Time</span>
               <span><strong>{kpis?.adjunctCount || 6}</strong> Adjunct</span>
             </div>
@@ -92,62 +94,62 @@ export default function DepartmentKPIsTab({ overviewData, setActiveTab, onRefres
         </div>
 
         {/* Student Faculty Ratio */}
-        <div className="bg-white rounded-xl p-5 border border-slate-200 shadow-2xs flex flex-col justify-between">
+        <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-2xs hover:shadow-md hover:border-slate-300 transition-all flex flex-col justify-between">
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Student:Faculty</span>
-            <div className="w-8 h-8 rounded-lg bg-slate-100 text-slate-800 border border-slate-200 flex items-center justify-center">
-              <GraduationCap size={16} />
+            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Student:Faculty</span>
+            <div className="w-10 h-10 rounded-xl bg-slate-100 text-slate-900 border border-slate-200 flex items-center justify-center">
+              <GraduationCap size={18} />
             </div>
           </div>
-          <div className="mt-3">
-            <div className="flex items-baseline gap-2">
-              <span className="text-2xl font-bold text-slate-900">{kpis?.studentFacultyRatio || '26.6:1'}</span>
-              <span className="text-[11px] font-medium text-slate-600 bg-slate-100 border border-slate-200 px-1.5 py-0.2 rounded">480 Students</span>
+          <div className="mt-4">
+            <div className="flex items-baseline gap-2.5">
+              <span className="text-3xl font-black text-slate-900">{kpis?.studentFacultyRatio || '26.6:1'}</span>
+              <span className="text-xs font-bold text-slate-700 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded-md">480 Students</span>
             </div>
-            <div className="mt-3 flex items-center justify-between text-xs text-slate-500 pt-2.5 border-t border-slate-100">
-              <span>Benchmark: &lt; 30:1</span>
-              <span className="font-semibold text-slate-900">Balanced</span>
+            <div className="mt-4 flex items-center justify-between text-xs text-slate-500 pt-3 border-t border-slate-100 font-medium">
+              <span>Target Benchmark: &lt; 30:1</span>
+              <span className="font-bold text-slate-900">Balanced</span>
             </div>
           </div>
         </div>
 
         {/* Teaching Satisfaction */}
-        <div className="bg-white rounded-xl p-5 border border-slate-200 shadow-2xs flex flex-col justify-between">
+        <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-2xs hover:shadow-md hover:border-slate-300 transition-all flex flex-col justify-between">
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Avg Faculty Rating</span>
-            <div className="w-8 h-8 rounded-lg bg-slate-100 text-slate-800 border border-slate-200 flex items-center justify-center">
-              <Star size={16} />
+            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Avg Faculty Rating</span>
+            <div className="w-10 h-10 rounded-xl bg-slate-100 text-slate-900 border border-slate-200 flex items-center justify-center">
+              <Star size={18} />
             </div>
           </div>
-          <div className="mt-3">
+          <div className="mt-4">
             <div className="flex items-baseline gap-2">
-              <span className="text-2xl font-bold text-slate-900">{kpis?.avgTeachingRating || 4.72}</span>
-              <span className="text-xs text-slate-400">/ 5.0</span>
-              <span className="text-[11px] font-medium text-slate-600 bg-slate-100 border border-slate-200 px-1.5 py-0.2 rounded ml-auto">94.2% Positive</span>
+              <span className="text-3xl font-black text-slate-900">{kpis?.avgTeachingRating || 4.72}</span>
+              <span className="text-xs text-slate-400 font-medium">/ 5.0</span>
+              <span className="text-xs font-bold text-slate-700 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded-md ml-auto">94.2% Positive</span>
             </div>
-            <div className="mt-3 flex items-center justify-between text-xs text-slate-500 pt-2.5 border-t border-slate-100">
+            <div className="mt-4 flex items-center justify-between text-xs text-slate-500 pt-3 border-t border-slate-100 font-medium">
               <span>842 Student Reviews</span>
-              <span className="font-semibold text-slate-900">98.2% SLA</span>
+              <span className="font-bold text-slate-900">98.2% SLA</span>
             </div>
           </div>
         </div>
 
         {/* Attention Flags */}
-        <div className="bg-white rounded-xl p-5 border border-slate-200 shadow-2xs flex flex-col justify-between">
+        <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-2xs hover:shadow-md hover:border-slate-300 transition-all flex flex-col justify-between">
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Attention Flags</span>
-            <div className="w-8 h-8 rounded-lg bg-slate-100 text-slate-800 border border-slate-200 flex items-center justify-center">
-              <AlertTriangle size={16} />
+            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Attention Flags</span>
+            <div className="w-10 h-10 rounded-xl bg-slate-100 text-slate-900 border border-slate-200 flex items-center justify-center">
+              <AlertTriangle size={18} />
             </div>
           </div>
-          <div className="mt-3">
-            <div className="flex items-baseline gap-2">
-              <span className="text-2xl font-bold text-slate-900">
+          <div className="mt-4">
+            <div className="flex items-baseline gap-2.5">
+              <span className="text-3xl font-black text-slate-900">
                 {(kpis?.overloadedFacultyCount || 0) + (kpis?.overloadedAdvisorsCount || 0)}
               </span>
-              <span className="text-[11px] font-medium text-rose-700 bg-rose-50 border border-rose-200 px-1.5 py-0.2 rounded">Action Required</span>
+              <span className="text-xs font-bold text-rose-700 bg-rose-50 border border-rose-200 px-2 py-0.5 rounded-md">Action Required</span>
             </div>
-            <div className="mt-3 flex items-center justify-between text-xs text-slate-500 pt-2.5 border-t border-slate-100">
+            <div className="mt-4 flex items-center justify-between text-xs text-slate-500 pt-3 border-t border-slate-100 font-medium">
               <span><strong>{kpis?.overloadedFacultyCount || 2}</strong> Faculty Overload</span>
               <span><strong>{kpis?.overloadedAdvisorsCount || 1}</strong> Advisor Overload</span>
             </div>
@@ -156,56 +158,56 @@ export default function DepartmentKPIsTab({ overviewData, setActiveTab, onRefres
       </div>
 
       {/* 2-Column Split: Budget & Spend / Priorities Stream */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
         {/* Adjunct Budget & Capacity Burn Card */}
-        <div className="bg-white rounded-xl p-5 border border-slate-200 shadow-2xs flex flex-col justify-between">
+        <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-2xs flex flex-col justify-between">
           <div>
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+            <div className="flex items-center justify-between pb-4 border-b border-slate-100">
               <div>
-                <h3 className="font-bold text-slate-900 text-xs flex items-center gap-1.5">
-                  <DollarSign size={15} className="text-slate-800" />
+                <h3 className="font-extrabold text-slate-900 text-sm flex items-center gap-2">
+                  <DollarSign size={17} className="text-slate-800" />
                   Adjunct Budget & Capacity Burn
                 </h3>
-                <p className="text-[11px] text-slate-400">Term financial spend against cap</p>
+                <p className="text-xs text-slate-400 mt-0.5">Term financial spend against approved cap</p>
               </div>
-              <span className="text-xs font-semibold px-2 py-0.5 rounded bg-slate-100 text-slate-800 border border-slate-200">
+              <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-slate-100 text-slate-900 border border-slate-200">
                 {budgetPercent}%
               </span>
             </div>
 
             {/* Financial Meter */}
-            <div className="mt-4 space-y-4">
+            <div className="mt-5 space-y-5">
               <div>
-                <div className="flex justify-between text-xs font-medium mb-1.5">
+                <div className="flex justify-between text-xs font-semibold mb-2">
                   <span className="text-slate-600">Fiscal Spend</span>
-                  <span className="text-slate-900 font-bold">${budget.spent.toLocaleString()} / ${budget.allocated.toLocaleString()}</span>
+                  <span className="text-slate-900 font-black">${budget.spent.toLocaleString()} / ${budget.allocated.toLocaleString()}</span>
                 </div>
-                <div className="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
                   <div 
                     className="h-full bg-slate-900 rounded-full transition-all duration-300"
                     style={{ width: `${Math.min(budgetPercent, 100)}%` }}
                   />
                 </div>
-                <div className="text-[10px] text-slate-400 mt-1 flex justify-between">
+                <div className="text-xs text-slate-400 mt-1.5 flex justify-between font-medium">
                   <span>Remaining: ${(budget.allocated - budget.spent).toLocaleString()}</span>
                   <span>Avg Rate: ${budget.adjunctHourlyRateAvg}/hr</span>
                 </div>
               </div>
 
-              {/* Hours Logged */}
+              {/* Teaching Hours */}
               <div>
-                <div className="flex justify-between text-xs font-medium mb-1.5">
+                <div className="flex justify-between text-xs font-semibold mb-2">
                   <span className="text-slate-600">Teaching Hours Logged</span>
-                  <span className="text-slate-900 font-bold">{budget.hoursLoggedThisMonth} / {budget.hoursAllocatedCap} hrs</span>
+                  <span className="text-slate-900 font-black">{budget.hoursLoggedThisMonth} / {budget.hoursAllocatedCap} hrs</span>
                 </div>
-                <div className="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
                   <div 
                     className="h-full bg-slate-700 rounded-full transition-all duration-300"
                     style={{ width: `${Math.min(hoursPercent, 100)}%` }}
                   />
                 </div>
-                <div className="text-[10px] text-slate-400 mt-1 flex justify-between">
+                <div className="text-xs text-slate-400 mt-1.5 flex justify-between font-medium">
                   <span>Cap Buffer: {budget.hoursAllocatedCap - budget.hoursLoggedThisMonth} hrs</span>
                   <span>{hoursPercent}% of term cap</span>
                 </div>
@@ -213,50 +215,50 @@ export default function DepartmentKPIsTab({ overviewData, setActiveTab, onRefres
             </div>
           </div>
 
-          <div className="mt-5 pt-3 border-t border-slate-100 grid grid-cols-2 gap-2 text-center">
-            <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-200">
-              <span className="block text-[10px] text-slate-400 uppercase font-semibold">In Onboarding</span>
-              <span className="text-sm font-bold text-slate-900">{kpis?.pendingOnboardingCount || 2}</span>
+          <div className="mt-6 pt-4 border-t border-slate-100 grid grid-cols-2 gap-3 text-center">
+            <div className="p-3 rounded-xl bg-slate-50 border border-slate-200">
+              <span className="block text-xs text-slate-400 uppercase font-bold">In Onboarding</span>
+              <span className="text-base font-extrabold text-slate-900 mt-0.5 block">{kpis?.pendingOnboardingCount || 2}</span>
             </div>
-            <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-200">
-              <span className="block text-[10px] text-slate-400 uppercase font-semibold">Job Requisitions</span>
-              <span className="text-sm font-bold text-slate-900">{kpis?.openJobRequisitionsCount || 3}</span>
+            <div className="p-3 rounded-xl bg-slate-50 border border-slate-200">
+              <span className="block text-xs text-slate-400 uppercase font-bold">Job Requisitions</span>
+              <span className="text-base font-extrabold text-slate-900 mt-0.5 block">{kpis?.openJobRequisitionsCount || 3}</span>
             </div>
           </div>
         </div>
 
         {/* Priority Department Action Items */}
-        <div className="lg:col-span-2 bg-white rounded-xl p-5 border border-slate-200 shadow-2xs flex flex-col justify-between">
+        <div className="lg:col-span-2 bg-white rounded-2xl p-6 border border-slate-200 shadow-2xs flex flex-col justify-between">
           <div>
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+            <div className="flex items-center justify-between pb-4 border-b border-slate-100">
               <div>
-                <h3 className="font-bold text-slate-900 text-xs">
+                <h3 className="font-extrabold text-slate-900 text-sm">
                   Department Priority Decisions
                 </h3>
-                <p className="text-[11px] text-slate-400">Action items requiring chair authorization</p>
+                <p className="text-xs text-slate-400 mt-0.5">Action items requiring chair authorization</p>
               </div>
-              <span className="text-xs font-semibold px-2 py-0.5 rounded bg-slate-100 text-slate-800 border border-slate-200">
-                {alerts?.length || 0} Items
+              <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-slate-100 text-slate-900 border border-slate-200">
+                {alerts?.length || 0} Decisions
               </span>
             </div>
 
-            <div className="mt-3.5 space-y-2">
+            <div className="mt-4 space-y-3">
               {(alerts || []).map((alert) => (
                 <div 
                   key={alert.id}
-                  className="p-3 rounded-lg bg-slate-50/70 border border-slate-200 flex items-start justify-between gap-3"
+                  className="p-4 rounded-xl bg-slate-50/70 border border-slate-200 flex items-start justify-between gap-4"
                 >
-                  <div className="flex items-start gap-2.5 min-w-0">
-                    <span className="mt-1 w-1.5 h-1.5 rounded-full bg-slate-800 shrink-0" />
+                  <div className="flex items-start gap-3 min-w-0">
+                    <span className="mt-1.5 w-2 h-2 rounded-full bg-slate-900 shrink-0" />
                     <div className="min-w-0">
                       <div className="flex items-center gap-2">
-                        <h4 className="text-xs font-bold text-slate-900 truncate">{alert.title}</h4>
-                        <span className="text-[10px] text-slate-400">({alert.timestamp})</span>
+                        <h4 className="text-sm font-extrabold text-slate-900 truncate">{alert.title}</h4>
+                        <span className="text-xs text-slate-400">({alert.timestamp})</span>
                       </div>
-                      <p className="text-xs text-slate-600 mt-0.5 leading-relaxed">{alert.message}</p>
+                      <p className="text-xs text-slate-600 mt-1 leading-relaxed">{alert.message}</p>
                       {alert.suggestedAction && (
-                        <p className="text-[11px] text-slate-800 font-semibold mt-1">
-                          Suggested: {alert.suggestedAction}
+                        <p className="text-xs text-slate-900 font-bold mt-1.5">
+                          Suggested Action: {alert.suggestedAction}
                         </p>
                       )}
                     </div>
@@ -265,25 +267,25 @@ export default function DepartmentKPIsTab({ overviewData, setActiveTab, onRefres
                   {alert.category === 'workload' && (
                     <button 
                       onClick={() => setActiveTab('workload')}
-                      className="shrink-0 px-2.5 py-1 text-xs font-medium bg-white hover:bg-slate-100 border border-slate-200 text-slate-800 rounded-lg transition-all flex items-center gap-1 cursor-pointer"
+                      className="shrink-0 px-3.5 py-1.5 text-xs font-bold bg-white hover:bg-slate-100 border border-slate-200 text-slate-900 rounded-xl transition-all flex items-center gap-1 cursor-pointer shadow-2xs"
                     >
-                      Rebalance <ChevronRight size={12} />
+                      Rebalance <ChevronRight size={13} />
                     </button>
                   )}
                   {alert.category === 'advisory' && (
                     <button 
                       onClick={() => setActiveTab('advisors')}
-                      className="shrink-0 px-2.5 py-1 text-xs font-medium bg-white hover:bg-slate-100 border border-slate-200 text-slate-800 rounded-lg transition-all flex items-center gap-1 cursor-pointer"
+                      className="shrink-0 px-3.5 py-1.5 text-xs font-bold bg-white hover:bg-slate-100 border border-slate-200 text-slate-900 rounded-xl transition-all flex items-center gap-1 cursor-pointer shadow-2xs"
                     >
-                      Caseload <ChevronRight size={12} />
+                      Caseload <ChevronRight size={13} />
                     </button>
                   )}
                   {alert.category === 'outcomes' && (
                     <button 
                       onClick={() => setActiveTab('outcomes')}
-                      className="shrink-0 px-2.5 py-1 text-xs font-medium bg-white hover:bg-slate-100 border border-slate-200 text-slate-800 rounded-lg transition-all flex items-center gap-1 cursor-pointer"
+                      className="shrink-0 px-3.5 py-1.5 text-xs font-bold bg-white hover:bg-slate-100 border border-slate-200 text-slate-900 rounded-xl transition-all flex items-center gap-1 cursor-pointer shadow-2xs"
                     >
-                      Review <ChevronRight size={12} />
+                      Review <ChevronRight size={13} />
                     </button>
                   )}
                 </div>
@@ -291,61 +293,64 @@ export default function DepartmentKPIsTab({ overviewData, setActiveTab, onRefres
             </div>
           </div>
 
-          <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400">
-            <span>Real-time anomaly monitoring enabled</span>
-            <span className="text-slate-800 font-semibold cursor-pointer hover:underline flex items-center gap-1" onClick={onRefresh}>
-              <RefreshCw size={11} /> Sync Feed
+          <div className="mt-5 pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400 font-medium">
+            <span className="flex items-center gap-1.5">
+              <ShieldCheck size={14} className="text-slate-500" />
+              Real-time anomaly monitoring enabled
+            </span>
+            <span className="text-slate-900 font-bold cursor-pointer hover:underline flex items-center gap-1" onClick={onRefresh}>
+              <RefreshCw size={12} /> Sync Feed
             </span>
           </div>
         </div>
       </div>
 
-      {/* 3-Column Specialization Breakdown */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="p-4 rounded-xl bg-white border border-slate-200 shadow-2xs flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-slate-900 text-white flex items-center justify-center font-bold text-xs">
+      {/* 3-Column Specialization Breakdown Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-2xs flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center font-black text-xs shadow-xs">
               CS
             </div>
             <div>
-              <h4 className="text-xs font-bold text-slate-900">Core Computer Science</h4>
-              <p className="text-[11px] text-slate-500">280 Enrolled • 10 Faculty</p>
+              <h4 className="text-sm font-extrabold text-slate-900">Core Computer Science</h4>
+              <p className="text-xs text-slate-500 font-medium mt-0.5">280 Enrolled • 10 Faculty</p>
             </div>
           </div>
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium bg-slate-50 text-slate-700 border border-slate-200">
-            <span className="w-1.5 h-1.5 rounded-full bg-slate-800" />
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-800 border border-slate-200">
+            <span className="w-2 h-2 rounded-full bg-slate-900" />
             Balanced
           </span>
         </div>
 
-        <div className="p-4 rounded-xl bg-white border border-slate-200 shadow-2xs flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-slate-900 text-white flex items-center justify-center font-bold text-xs">
+        <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-2xs flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center font-black text-xs shadow-xs">
               AI
             </div>
             <div>
-              <h4 className="text-xs font-bold text-slate-900">AI & Data Science</h4>
-              <p className="text-[11px] text-slate-500">120 Enrolled • 5 Faculty</p>
+              <h4 className="text-sm font-extrabold text-slate-900">AI & Data Science</h4>
+              <p className="text-xs text-slate-500 font-medium mt-0.5">120 Enrolled • 5 Faculty</p>
             </div>
           </div>
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium bg-slate-50 text-slate-700 border border-slate-200">
-            <span className="w-1.5 h-1.5 rounded-full bg-slate-800" />
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-800 border border-slate-200">
+            <span className="w-2 h-2 rounded-full bg-slate-900" />
             Balanced
           </span>
         </div>
 
-        <div className="p-4 rounded-xl bg-white border border-slate-200 shadow-2xs flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-slate-900 text-white flex items-center justify-center font-bold text-xs">
+        <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-2xs flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center font-black text-xs shadow-xs">
               CY
             </div>
             <div>
-              <h4 className="text-xs font-bold text-slate-900">Cybersecurity & Cloud</h4>
-              <p className="text-[11px] text-slate-500">80 Enrolled • 3 Faculty</p>
+              <h4 className="text-sm font-extrabold text-slate-900">Cybersecurity & Cloud</h4>
+              <p className="text-xs text-slate-500 font-medium mt-0.5">80 Enrolled • 3 Faculty</p>
             </div>
           </div>
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium bg-slate-50 text-slate-700 border border-slate-200">
-            <span className="w-1.5 h-1.5 rounded-full bg-slate-400" />
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-800 border border-slate-200">
+            <span className="w-2 h-2 rounded-full bg-slate-400" />
             Recruiting
           </span>
         </div>
