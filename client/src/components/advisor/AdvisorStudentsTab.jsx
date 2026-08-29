@@ -3,7 +3,6 @@ import {
   Users, 
   Search, 
   Download, 
-  Filter, 
   ChevronRight, 
   Calendar, 
   AlertTriangle, 
@@ -15,7 +14,6 @@ import {
   BookOpen,
   MessageSquare
 } from 'lucide-react';
-import SmartIcon from '../common/SmartIcon';
 
 export default function AdvisorStudentsTab({ students = [], onUpdateNotes, onScheduleClick, onMessageClick }) {
   const [searchQuery, setSearchQuery] = useState('');
@@ -71,11 +69,11 @@ export default function AdvisorStudentsTab({ students = [], onUpdateNotes, onSch
 
   return (
     <div className="space-y-6">
-      {/* Top Header & Search Bar */}
-      <div className="bg-white rounded-2xl p-6 border border-sky-100 shadow-2xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+      {/* Top Header & Search Bar (Grey, Black & White) */}
+      <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-2xs flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-3">
-            <span className="p-2.5 rounded-xl bg-sky-50 text-sky-900 border border-sky-200 font-bold text-sm flex items-center justify-center">
+            <span className="p-2.5 rounded-xl bg-slate-100 text-slate-900 border border-slate-200 font-bold text-sm flex items-center justify-center">
               <Users size={20} />
             </span>
             <div>
@@ -98,7 +96,7 @@ export default function AdvisorStudentsTab({ students = [], onUpdateNotes, onSch
               placeholder="Search name, roll no..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 bg-sky-50/40 border border-sky-200/80 rounded-xl text-xs text-slate-900 outline-none focus:border-slate-900 transition-all font-medium"
+              className="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-900 outline-none focus:border-slate-900 transition-all font-medium"
             />
           </div>
 
@@ -122,20 +120,20 @@ export default function AdvisorStudentsTab({ students = [], onUpdateNotes, onSch
           {/* Export to Excel */}
           <button
             onClick={handleExportExcel}
-            className="px-3.5 py-2 bg-white hover:bg-sky-50 border border-sky-200 text-slate-900 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-2xs"
+            className="px-3.5 py-2 bg-white hover:bg-slate-100 border border-slate-300 text-slate-900 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-2xs"
           >
-            <Download size={14} className="text-sky-700" />
+            <Download size={14} className="text-slate-700" />
             <span>Export Excel</span>
           </button>
         </div>
       </div>
 
-      {/* Caseload Table */}
-      <div className="bg-white rounded-2xl border border-sky-100 shadow-2xs overflow-hidden">
+      {/* Caseload Table (Grey, Black and White Theme) */}
+      <div className="bg-white rounded-2xl border border-slate-200 shadow-2xs overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs border-collapse">
             <thead>
-              <tr className="bg-sky-50/60 border-b border-sky-100 text-slate-600 font-bold uppercase tracking-wider">
+              <tr className="bg-slate-50/80 border-b border-slate-200 text-slate-600 font-bold uppercase tracking-wider">
                 <th className="py-3.5 px-4">Student Name & Roll No</th>
                 <th className="py-3.5 px-4">Semester</th>
                 <th className="py-3.5 px-4">CGPA</th>
@@ -150,8 +148,9 @@ export default function AdvisorStudentsTab({ students = [], onUpdateNotes, onSch
               {filteredStudents.map((s) => (
                 <tr 
                   key={s.id}
-                  className="hover:bg-sky-50/30 transition-colors"
+                  className="hover:bg-slate-50/70 transition-colors"
                 >
+                  {/* Name & Roll */}
                   <td className="py-3.5 px-4">
                     <div className="flex items-center gap-3">
                       <div className="w-8 h-8 rounded-xl bg-slate-900 text-white font-bold flex items-center justify-center text-xs shrink-0 shadow-xs">
@@ -163,49 +162,63 @@ export default function AdvisorStudentsTab({ students = [], onUpdateNotes, onSch
                       </div>
                     </div>
                   </td>
+
+                  {/* Semester */}
                   <td className="py-3.5 px-4 font-semibold text-slate-700">
                     Semester {s.semester}
                   </td>
+
+                  {/* CGPA (Grey & Black) */}
                   <td className="py-3.5 px-4">
-                    <span className={`font-black ${s.cgpa < 6.0 ? 'text-rose-600' : s.cgpa >= 8.5 ? 'text-emerald-700' : 'text-slate-900'}`}>
+                    <span className="font-black text-slate-900 text-sm">
                       {s.cgpa}
                     </span>
-                    <span className="text-[10px] text-slate-400"> / 10.0</span>
+                    <span className="text-[11px] text-slate-400 font-medium"> / 10.0</span>
                   </td>
+
+                  {/* Attendance with Sleek Monochrome Progress Bar */}
                   <td className="py-3.5 px-4">
-                    <div className="flex items-center gap-2">
-                      <span className={`font-bold ${s.attendance < 65 ? 'text-rose-600 font-black' : 'text-slate-800'}`}>
+                    <div className="flex items-center gap-2.5">
+                      <span className="font-bold text-slate-900 w-9">
                         {s.attendance}%
                       </span>
-                      <div className="w-12 h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                      <div className="w-14 h-1.5 bg-slate-100 rounded-full overflow-hidden">
                         <div 
-                          className={`h-full rounded-full ${s.attendance < 65 ? 'bg-rose-600' : s.attendance >= 85 ? 'bg-emerald-600' : 'bg-amber-500'}`}
+                          className="h-full bg-slate-900 rounded-full transition-all duration-300"
                           style={{ width: `${s.attendance}%` }}
                         />
                       </div>
                     </div>
                   </td>
+
+                  {/* Risk Status (Minimal Monochrome Pill) */}
                   <td className="py-3.5 px-4">
-                    <span className={`px-2.5 py-1 rounded-full text-[10px] font-extrabold border inline-block ${
+                    <span className={`px-2.5 py-1 rounded-full text-[11px] font-bold border inline-block ${
                       s.risk === 'high' 
-                        ? 'bg-rose-50 text-rose-900 border-rose-200' 
+                        ? 'bg-slate-900 text-white border-slate-900' 
                         : s.risk === 'medium'
-                        ? 'bg-amber-50 text-amber-900 border-amber-200'
-                        : 'bg-emerald-50 text-emerald-900 border-emerald-200'
+                        ? 'bg-slate-100 text-slate-800 border-slate-300'
+                        : 'bg-white text-slate-600 border-slate-200'
                     }`}>
                       {s.status}
                     </span>
                   </td>
+
+                  {/* Academic Standing */}
                   <td className="py-3.5 px-4 font-medium text-slate-700">
                     {s.standing}
                   </td>
+
+                  {/* Last Contact */}
                   <td className="py-3.5 px-4 text-slate-500 font-medium">
                     {s.lastMeetingDate || 'No record'}
                   </td>
+
+                  {/* Actions (Grey, Black and White Button) */}
                   <td className="py-3.5 px-4 text-right">
                     <button
                       onClick={() => handleOpenDrawer(s)}
-                      className="px-3 py-1.5 rounded-lg bg-sky-50 hover:bg-sky-100 text-sky-950 border border-sky-200 font-bold text-xs transition-all cursor-pointer"
+                      className="px-3.5 py-1.5 rounded-xl bg-white hover:bg-slate-900 hover:text-white text-slate-900 border border-slate-300 font-bold text-xs transition-all cursor-pointer shadow-2xs"
                     >
                       View Profile →
                     </button>
@@ -225,7 +238,7 @@ export default function AdvisorStudentsTab({ students = [], onUpdateNotes, onSch
         </div>
       </div>
 
-      {/* Slide-over Profile Drawer */}
+      {/* Slide-over Profile Drawer (Grey, Black & White) */}
       {selectedStudent && (
         <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-xs flex justify-end">
           <div className="w-full max-w-lg bg-white h-full shadow-2xl p-6 overflow-y-auto space-y-6 flex flex-col justify-between">
@@ -251,15 +264,15 @@ export default function AdvisorStudentsTab({ students = [], onUpdateNotes, onSch
 
               {/* Quick Academic Snapshot */}
               <div className="grid grid-cols-3 gap-3">
-                <div className="p-3.5 rounded-xl bg-sky-50/50 border border-sky-100 text-center">
+                <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-center">
                   <span className="block text-[10px] font-bold text-slate-400 uppercase">CGPA</span>
                   <span className="text-xl font-black text-slate-900 mt-0.5 block">{selectedStudent.cgpa}</span>
                 </div>
-                <div className="p-3.5 rounded-xl bg-sky-50/50 border border-sky-100 text-center">
+                <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-center">
                   <span className="block text-[10px] font-bold text-slate-400 uppercase">Attendance</span>
                   <span className="text-xl font-black text-slate-900 mt-0.5 block">{selectedStudent.attendance}%</span>
                 </div>
-                <div className="p-3.5 rounded-xl bg-sky-50/50 border border-sky-100 text-center">
+                <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-center">
                   <span className="block text-[10px] font-bold text-slate-400 uppercase">Credits</span>
                   <span className="text-xl font-black text-slate-900 mt-0.5 block">{selectedStudent.creditsEarned} / {selectedStudent.totalCreditsReq}</span>
                 </div>
@@ -268,12 +281,12 @@ export default function AdvisorStudentsTab({ students = [], onUpdateNotes, onSch
               {/* Current Registered Courses & Grades */}
               <div>
                 <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2 flex items-center gap-1.5">
-                  <BookOpen size={14} className="text-sky-700" />
+                  <BookOpen size={14} className="text-slate-800" />
                   Current Semester Enrolled Courses
                 </h4>
                 <div className="space-y-2">
                   {(selectedStudent.coursesThisTerm || []).map((c, i) => (
-                    <div key={i} className="p-3 rounded-xl border border-slate-200 bg-slate-50/50 flex items-center justify-between text-xs">
+                    <div key={i} className="p-3 rounded-xl border border-slate-200 bg-slate-50 flex items-center justify-between text-xs">
                       <div>
                         <span className="font-extrabold text-slate-900 block">{c.code} • {c.title}</span>
                         <span className="text-slate-500 font-medium text-[11px]">Attendance: {c.attendance}%</span>
@@ -288,12 +301,12 @@ export default function AdvisorStudentsTab({ students = [], onUpdateNotes, onSch
 
               {/* Course Backlogs */}
               {(selectedStudent.courseBacklogs || []).length > 0 && (
-                <div className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-xs">
-                  <span className="font-extrabold text-rose-900 block mb-1 flex items-center gap-1.5">
-                    <AlertTriangle size={14} className="text-rose-600" />
+                <div className="p-3.5 rounded-xl bg-slate-100 border border-slate-300 text-xs">
+                  <span className="font-extrabold text-slate-900 block mb-1 flex items-center gap-1.5">
+                    <AlertTriangle size={14} className="text-slate-800" />
                     Outstanding Course Backlogs ({selectedStudent.courseBacklogs.length})
                   </span>
-                  <ul className="list-disc list-inside text-rose-800 space-y-0.5">
+                  <ul className="list-disc list-inside text-slate-700 space-y-0.5">
                     {selectedStudent.courseBacklogs.map((b, i) => (
                       <li key={i} className="font-medium">{b}</li>
                     ))}
@@ -305,7 +318,7 @@ export default function AdvisorStudentsTab({ students = [], onUpdateNotes, onSch
               <div>
                 <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2 flex items-center justify-between">
                   <span className="flex items-center gap-1.5">
-                    <Edit3 size={14} className="text-sky-700" />
+                    <Edit3 size={14} className="text-slate-800" />
                     Confidential Advisor Notes
                   </span>
                   <span className="text-[10px] text-slate-400">Last updated: {selectedStudent.lastMeetingDate}</span>
@@ -337,7 +350,7 @@ export default function AdvisorStudentsTab({ students = [], onUpdateNotes, onSch
                   setSelectedStudent(null);
                   if (onScheduleClick) onScheduleClick(selectedStudent);
                 }}
-                className="flex-1 py-2.5 rounded-xl bg-sky-50 hover:bg-sky-100 text-sky-950 border border-sky-200 font-bold text-xs flex items-center justify-center gap-1.5 transition-all"
+                className="flex-1 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-900 border border-slate-300 font-bold text-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer"
               >
                 <Calendar size={14} />
                 <span>Schedule Session</span>
@@ -347,7 +360,7 @@ export default function AdvisorStudentsTab({ students = [], onUpdateNotes, onSch
                   setSelectedStudent(null);
                   if (onMessageClick) onMessageClick(selectedStudent);
                 }}
-                className="flex-1 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-all"
+                className="flex-1 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer"
               >
                 <MessageSquare size={14} />
                 <span>Send Query</span>
