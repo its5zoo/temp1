@@ -4,19 +4,14 @@ import {
   MessageSquare, 
   Send, 
   Bot, 
-  CheckCircle, 
-  Search, 
-  HelpCircle, 
-  User, 
   CheckCircle2, 
-  Clock,
   Sparkles,
-  ChevronRight
+  Clock,
+  User
 } from 'lucide-react';
 
 export default function Messages() {
   const { user } = useAuth();
-  const [activeTab, setActiveTab] = useState('doubts');
   const [selectedDoubtId, setSelectedDoubtId] = useState(1);
   const [replyText, setReplyText] = useState('');
   const [toast, setToast] = useState(null);
@@ -90,8 +85,8 @@ export default function Messages() {
     <div className="max-w-7xl mx-auto space-y-6 pb-12">
       {/* Toast */}
       {toast && (
-        <div className="fixed bottom-6 right-6 z-50 p-3.5 rounded-lg shadow-md bg-slate-900 border border-slate-700 text-white flex items-center gap-2 animate-in slide-in-from-bottom-5 text-xs font-semibold">
-          <CheckCircle2 size={16} className="text-emerald-400" />
+        <div className="fixed bottom-6 right-6 z-50 p-4 rounded-xl shadow-lg bg-slate-900 border border-slate-700 text-white flex items-center gap-2.5 animate-in slide-in-from-bottom-5 text-sm font-semibold">
+          <CheckCircle2 size={18} className="text-emerald-400" />
           {toast}
         </div>
       )}
@@ -99,31 +94,35 @@ export default function Messages() {
       {/* Header Banner */}
       <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <div className="flex items-center gap-2">
-            <span className="p-2 rounded-xl bg-slate-100 text-slate-800 border border-slate-200">
-              <MessageSquare size={18} />
+          <div className="flex items-center gap-3">
+            <span className="p-2.5 rounded-xl bg-slate-900 text-white font-bold text-sm flex items-center justify-center">
+              <MessageSquare size={20} />
             </span>
-            <h1 className="text-xl font-bold text-slate-900">Academic Inquiries & Doubts Hub</h1>
+            <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">
+              Academic Inquiries & Doubts Hub
+            </h1>
           </div>
-          <p className="text-xs text-slate-500 mt-1">
+          <p className="text-sm text-slate-500 mt-1">
             Student academic doubt resolution queue with automated AI Copilot suggestions.
           </p>
         </div>
 
         <div className="flex items-center gap-2">
-          <span className="px-3 py-1 rounded-lg bg-slate-50 border border-slate-200 text-xs font-medium text-slate-700">
+          <div className="px-4 py-2 rounded-xl bg-slate-50 border border-slate-200 text-sm font-semibold text-slate-800">
             {doubts.filter(d => d.status === 'open').length} Open Doubts Pending
-          </span>
+          </div>
         </div>
       </div>
 
       {/* Main Inbox Layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 min-h-[560px]">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 min-h-[600px]">
         {/* Left Queries List */}
-        <div className="bg-white rounded-xl border border-slate-200 shadow-2xs flex flex-col overflow-hidden">
-          <div className="p-3.5 border-b border-slate-100 bg-slate-50/60 flex items-center justify-between">
-            <span className="text-xs font-bold text-slate-900">Student Doubts Queue</span>
-            <span className="text-[11px] text-slate-500">{doubts.length} Total</span>
+        <div className="bg-white rounded-2xl border border-slate-200 shadow-2xs flex flex-col overflow-hidden">
+          <div className="p-4 border-b border-slate-100 bg-slate-50/70 flex items-center justify-between">
+            <span className="text-sm font-bold text-slate-900">Student Doubts Queue</span>
+            <span className="text-xs font-semibold text-slate-500 bg-white border border-slate-200 px-2 py-0.5 rounded-md">
+              {doubts.length} Total
+            </span>
           </div>
 
           <div className="divide-y divide-slate-100 overflow-y-auto flex-1">
@@ -135,27 +134,27 @@ export default function Messages() {
                 <div
                   key={d.id}
                   onClick={() => setSelectedDoubtId(d.id)}
-                  className={`p-3.5 cursor-pointer transition-all ${
-                    isSelected ? 'bg-slate-50 border-l-2 border-slate-900' : 'hover:bg-slate-50/50'
+                  className={`p-4 cursor-pointer transition-all ${
+                    isSelected ? 'bg-slate-50 border-l-4 border-slate-900' : 'hover:bg-slate-50/60'
                   }`}
                 >
-                  <div className="flex items-center justify-between gap-2 mb-1">
-                    <span className="text-[10px] font-bold text-slate-800 bg-slate-100 border border-slate-200 px-1.5 py-0.2 rounded font-mono">
+                  <div className="flex items-center justify-between gap-2 mb-1.5">
+                    <span className="text-xs font-bold text-slate-900 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded font-mono">
                       {d.subject}
                     </span>
-                    <span className={`inline-flex items-center gap-1 px-1.5 py-0.2 rounded text-[10px] font-medium ${
-                      isOpen ? 'bg-amber-50 text-amber-700 border border-amber-200' : 'bg-slate-100 text-slate-700 border border-slate-200'
+                    <span className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-xs font-medium ${
+                      isOpen ? 'bg-amber-50 text-amber-800 border border-amber-200' : 'bg-slate-100 text-slate-800 border border-slate-200'
                     }`}>
                       <span className={`w-1.5 h-1.5 rounded-full ${isOpen ? 'bg-amber-500' : 'bg-emerald-500'}`} />
                       {isOpen ? 'Open' : 'Answered'}
                     </span>
                   </div>
 
-                  <h4 className="font-semibold text-xs text-slate-900 line-clamp-1">{d.topic}</h4>
-                  <p className="text-[11px] text-slate-500 mt-1 line-clamp-1">{d.query}</p>
+                  <h4 className="font-bold text-sm text-slate-900 line-clamp-1">{d.topic}</h4>
+                  <p className="text-xs text-slate-500 mt-1 line-clamp-2 leading-relaxed">{d.query}</p>
 
-                  <div className="mt-2.5 flex items-center justify-between text-[10px] text-slate-400">
-                    <span>{d.studentName}</span>
+                  <div className="mt-3 flex items-center justify-between text-xs text-slate-400">
+                    <span className="font-medium text-slate-600">{d.studentName}</span>
                     <span>{d.timestamp}</span>
                   </div>
                 </div>
@@ -165,72 +164,75 @@ export default function Messages() {
         </div>
 
         {/* Right Query Detail & Reply Pane */}
-        <div className="lg:col-span-2 bg-white rounded-xl border border-slate-200 shadow-2xs p-5 flex flex-col justify-between">
-          <div>
+        <div className="lg:col-span-2 bg-white rounded-2xl border border-slate-200 shadow-2xs p-6 flex flex-col justify-between">
+          <div className="space-y-5">
             {/* Header */}
-            <div className="flex items-start justify-between pb-3 border-b border-slate-100 gap-3">
+            <div className="flex items-start justify-between pb-4 border-b border-slate-100 gap-4">
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="text-xs font-bold text-slate-900 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded font-mono">
+                  <span className="text-xs font-bold text-slate-900 bg-slate-100 border border-slate-200 px-2.5 py-0.5 rounded font-mono">
                     {selectedDoubt.subject}
                   </span>
-                  <span className="text-xs text-slate-400">• Submitted by {selectedDoubt.studentName}</span>
+                  <span className="text-xs text-slate-500 font-medium">• Submitted by <strong className="text-slate-800">{selectedDoubt.studentName}</strong></span>
                 </div>
-                <h3 className="font-bold text-sm text-slate-900 mt-1">{selectedDoubt.topic}</h3>
+                <h3 className="font-extrabold text-lg text-slate-900 mt-1.5 leading-snug">{selectedDoubt.topic}</h3>
               </div>
 
-              <span className="text-[11px] text-slate-400">{selectedDoubt.timestamp}</span>
+              <span className="text-xs text-slate-400 font-medium whitespace-nowrap">{selectedDoubt.timestamp}</span>
             </div>
 
             {/* Student Query Box */}
-            <div className="mt-4 p-4 rounded-xl bg-slate-50 border border-slate-200">
-              <div className="flex items-center gap-2 mb-2">
-                <div className="w-6 h-6 rounded-md bg-slate-200 text-slate-700 font-semibold text-[10px] flex items-center justify-center">
+            <div className="p-4.5 rounded-xl bg-slate-50 border border-slate-200">
+              <div className="flex items-center gap-2.5 mb-2.5">
+                <div className="w-8 h-8 rounded-lg bg-slate-200 text-slate-800 font-bold text-xs flex items-center justify-center">
                   {selectedDoubt.studentAvatar}
                 </div>
-                <span className="text-xs font-semibold text-slate-800">{selectedDoubt.studentName}</span>
+                <div>
+                  <span className="text-sm font-bold text-slate-900 block">{selectedDoubt.studentName}</span>
+                  <span className="text-xs text-slate-400">Student Question</span>
+                </div>
               </div>
-              <p className="text-xs text-slate-700 leading-relaxed">{selectedDoubt.query}</p>
+              <p className="text-sm text-slate-800 leading-relaxed">{selectedDoubt.query}</p>
             </div>
 
             {/* AI Copilot Suggestion */}
             {selectedDoubt.aiResponse && (
-              <div className="mt-4 p-4 rounded-xl bg-slate-50 border border-slate-200">
-                <div className="flex items-center gap-1.5 mb-2 text-xs font-semibold text-slate-800">
-                  <Sparkles size={14} className="text-slate-700" />
-                  <span>AI Copilot Instant Answer</span>
+              <div className="p-4.5 rounded-xl bg-slate-50/80 border border-slate-200">
+                <div className="flex items-center gap-2 mb-2 text-sm font-bold text-slate-900">
+                  <Sparkles size={16} className="text-slate-700" />
+                  <span>AI Copilot Verified Solution</span>
                 </div>
-                <p className="text-xs text-slate-600 leading-relaxed">{selectedDoubt.aiResponse}</p>
+                <p className="text-sm text-slate-700 leading-relaxed">{selectedDoubt.aiResponse}</p>
               </div>
             )}
 
             {/* Faculty Reply if exists */}
             {selectedDoubt.facultyReply && (
-              <div className="mt-4 p-4 rounded-xl bg-slate-100/70 border border-slate-200">
-                <span className="text-xs font-bold text-slate-900 block mb-1">Faculty Official Response</span>
-                <p className="text-xs text-slate-700 leading-relaxed">{selectedDoubt.facultyReply}</p>
+              <div className="p-4.5 rounded-xl bg-slate-100 border border-slate-200">
+                <span className="text-xs font-bold uppercase tracking-wider text-slate-500 block mb-1">Faculty Official Response</span>
+                <p className="text-sm text-slate-900 font-medium leading-relaxed">{selectedDoubt.facultyReply}</p>
               </div>
             )}
           </div>
 
           {/* Reply Form */}
-          <form onSubmit={handleSendReply} className="mt-6 pt-4 border-t border-slate-100">
-            <label className="block text-[11px] font-semibold text-slate-600 uppercase mb-2">
+          <form onSubmit={handleSendReply} className="mt-8 pt-5 border-t border-slate-100">
+            <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
               Send Response to Student
             </label>
-            <div className="flex gap-2">
+            <div className="flex gap-2.5">
               <input
                 type="text"
                 value={replyText}
                 onChange={(e) => setReplyText(e.target.value)}
                 placeholder="Type your explanation or review notes..."
-                className="flex-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs outline-none focus:border-slate-800 focus:bg-white"
+                className="flex-1 px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-slate-900 focus:bg-white transition-all"
               />
               <button
                 type="submit"
-                className="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white font-medium text-xs rounded-lg flex items-center gap-1.5 transition-all cursor-pointer"
+                className="px-6 py-3 bg-slate-900 hover:bg-slate-800 text-white font-semibold text-sm rounded-xl flex items-center gap-2 transition-all cursor-pointer shadow-xs"
               >
-                <Send size={13} />
+                <Send size={15} />
                 Reply
               </button>
             </div>
