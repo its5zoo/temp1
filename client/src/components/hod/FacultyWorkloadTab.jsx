@@ -105,10 +105,10 @@ export default function FacultyWorkloadTab({ workloadData, onRefresh }) {
       )}
 
       {/* Filter Toolbar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-200 shadow-2xs">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-sky-100 shadow-2xs">
         <div>
           <div className="flex items-center gap-3">
-            <span className="p-2.5 rounded-xl bg-sky-900 text-white font-bold text-sm flex items-center justify-center">
+            <span className="p-2 rounded-xl bg-sky-50 text-sky-900 border border-sky-200 font-bold text-sm flex items-center justify-center">
               <Scale size={18} />
             </span>
             <h2 className="text-xl font-extrabold text-slate-900">Faculty Workload Balancing</h2>
@@ -120,7 +120,7 @@ export default function FacultyWorkloadTab({ workloadData, onRefresh }) {
           <button
             onClick={() => setFilter('all')}
             className={`px-4 py-2 rounded-xl text-sm font-bold transition-all ${
-              filter === 'all' ? 'bg-sky-900 text-white' : 'bg-slate-50 text-slate-700 border border-slate-200 hover:bg-slate-100'
+              filter === 'all' ? 'bg-slate-900 text-white' : 'bg-sky-50/60 text-slate-700 border border-sky-100 hover:bg-sky-50'
             }`}
           >
             All ({faculty.length})
@@ -128,7 +128,7 @@ export default function FacultyWorkloadTab({ workloadData, onRefresh }) {
           <button
             onClick={() => setFilter('overloaded')}
             className={`px-4 py-2 rounded-xl text-sm font-bold transition-all flex items-center gap-1.5 ${
-              filter === 'overloaded' ? 'bg-slate-900 text-white' : 'bg-rose-50 text-rose-800 border border-rose-200 hover:bg-rose-100'
+              filter === 'overloaded' ? 'bg-slate-900 text-white' : 'bg-rose-50/60 text-rose-800 border border-rose-200 hover:bg-rose-50'
             }`}
           >
             <span className="w-2 h-2 rounded-full bg-rose-500" />
@@ -137,7 +137,7 @@ export default function FacultyWorkloadTab({ workloadData, onRefresh }) {
           <button
             onClick={() => setFilter('optimal')}
             className={`px-4 py-2 rounded-xl text-sm font-bold transition-all flex items-center gap-1.5 ${
-              filter === 'optimal' ? 'bg-sky-900 text-white' : 'bg-sky-50 text-sky-900 border border-sky-200 hover:bg-sky-100'
+              filter === 'optimal' ? 'bg-slate-900 text-white' : 'bg-sky-50/60 text-sky-900 border border-sky-200 hover:bg-sky-50'
             }`}
           >
             <span className="w-2 h-2 rounded-full bg-sky-600" />
@@ -146,7 +146,7 @@ export default function FacultyWorkloadTab({ workloadData, onRefresh }) {
           <button
             onClick={() => setFilter('available')}
             className={`px-4 py-2 rounded-xl text-sm font-bold transition-all flex items-center gap-1.5 ${
-              filter === 'available' ? 'bg-slate-900 text-white' : 'bg-slate-50 text-slate-700 border border-slate-200 hover:bg-slate-100'
+              filter === 'available' ? 'bg-slate-900 text-white' : 'bg-sky-50/60 text-slate-700 border border-sky-100 hover:bg-sky-50'
             }`}
           >
             <span className="w-2 h-2 rounded-full bg-slate-400" />
@@ -157,15 +157,15 @@ export default function FacultyWorkloadTab({ workloadData, onRefresh }) {
 
       {/* AI Smart Rebalance Suggestion Card */}
       {recommendations.length > 0 && (
-        <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-2xs">
+        <div className="bg-white rounded-2xl p-6 border border-sky-200 shadow-2xs">
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
             <div className="flex items-start gap-3.5">
-              <div className="p-2.5 rounded-xl bg-sky-900 text-white shrink-0 shadow-xs">
+              <div className="p-2.5 rounded-xl bg-sky-50 text-sky-900 border border-sky-200 shrink-0">
                 <SmartIcon size={20} />
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="text-xs font-bold px-2.5 py-0.5 rounded bg-sky-900 text-white uppercase tracking-wider">
+                  <span className="text-xs font-bold px-2.5 py-0.5 rounded bg-sky-50 text-sky-900 border border-sky-200 uppercase tracking-wider">
                     Smart Rebalance Suggestion
                   </span>
                   <span className="text-xs text-slate-400">Automated Optimizer</span>
@@ -179,13 +179,13 @@ export default function FacultyWorkloadTab({ workloadData, onRefresh }) {
 
                 {/* Score Projection Visual */}
                 <div className="flex flex-wrap items-center gap-3 mt-3.5 text-sm">
-                  <div className="flex items-center gap-2 bg-slate-50 px-3 py-1.5 rounded-xl border border-slate-200">
+                  <div className="flex items-center gap-2 bg-sky-50/50 px-3 py-1.5 rounded-xl border border-sky-100">
                     <span className="text-slate-500">{recommendations[0].fromFacultyName}:</span>
                     <span className="text-rose-600 font-bold line-through">92%</span>
                     <span>→</span>
                     <span className="text-slate-900 font-bold">{recommendations[0].expectedFromScore}% (Optimal)</span>
                   </div>
-                  <div className="flex items-center gap-2 bg-slate-50 px-3 py-1.5 rounded-xl border border-slate-200">
+                  <div className="flex items-center gap-2 bg-sky-50/50 px-3 py-1.5 rounded-xl border border-sky-100">
                     <span className="text-slate-500">{recommendations[0].toFacultyName}:</span>
                     <span className="text-slate-500 font-bold">50%</span>
                     <span>→</span>
@@ -198,7 +198,7 @@ export default function FacultyWorkloadTab({ workloadData, onRefresh }) {
             <button
               onClick={() => handleExecuteRecommendation(recommendations[0])}
               disabled={rebalancing}
-              className="shrink-0 px-5 py-3 rounded-xl bg-sky-900 hover:bg-sky-800 text-white font-bold text-sm flex items-center justify-center gap-2 transition-all cursor-pointer disabled:opacity-50 shadow-xs"
+              className="shrink-0 px-5 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm flex items-center justify-center gap-2 transition-all cursor-pointer disabled:opacity-50 shadow-xs"
             >
               <ArrowRightLeft size={16} />
               {rebalancing ? 'Applying...' : 'Execute 1-Click Rebalance'}
@@ -218,13 +218,13 @@ export default function FacultyWorkloadTab({ workloadData, onRefresh }) {
           return (
             <div 
               key={f.id}
-              className="bg-white rounded-2xl p-6 border border-slate-200 shadow-2xs hover:shadow-md hover:border-sky-800 transition-all duration-200 flex flex-col justify-between"
+              className="bg-white rounded-2xl p-6 border border-sky-100 shadow-2xs hover:shadow-md hover:border-sky-200 transition-all duration-200 flex flex-col justify-between"
             >
               <div>
                 {/* Faculty Card Header */}
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex items-center gap-3">
-                    <div className="w-11 h-11 rounded-2xl bg-sky-950 text-white font-extrabold text-sm flex items-center justify-center shadow-xs">
+                    <div className="w-11 h-11 rounded-2xl bg-slate-900 text-white font-extrabold text-sm flex items-center justify-center shadow-xs">
                       {f.avatar || f.name.charAt(0)}
                     </div>
                     <div>
@@ -262,20 +262,20 @@ export default function FacultyWorkloadTab({ workloadData, onRefresh }) {
                 </div>
 
                 {/* Workload Progress Bar */}
-                <div className="mt-4 p-4 rounded-xl bg-slate-50 border border-slate-200">
+                <div className="mt-4 p-4 rounded-xl bg-sky-50/40 border border-sky-100">
                   <div className="flex justify-between text-xs font-bold mb-1.5">
                     <span className="text-slate-700 flex items-center gap-1.5">
-                      <Clock size={14} className="text-sky-900" />
+                      <Clock size={14} className="text-sky-700" />
                       Weekly Teaching Load
                     </span>
                     <span className={isOverloaded ? 'text-rose-600 font-bold' : 'text-slate-900'}>
                       {f.currentWeeklyHours}h / {f.maxWeeklyHours}h ({percent}%)
                     </span>
                   </div>
-                  <div className="w-full h-2 bg-slate-200 rounded-full overflow-hidden">
+                  <div className="w-full h-2 bg-sky-100/70 rounded-full overflow-hidden">
                     <div 
                       className={`h-full rounded-full transition-all duration-300 ${
-                        isOverloaded ? 'bg-rose-600' : 'bg-sky-900'
+                        isOverloaded ? 'bg-rose-600' : 'bg-slate-900'
                       }`}
                       style={{ width: `${Math.min(percent, 100)}%` }}
                     />
@@ -297,7 +297,7 @@ export default function FacultyWorkloadTab({ workloadData, onRefresh }) {
                     f.assignedCourses.map((c) => (
                       <div 
                         key={c.id}
-                        className="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between gap-2"
+                        className="p-3 rounded-xl bg-sky-50/30 border border-sky-100 flex items-center justify-between gap-2"
                       >
                         <div className="min-w-0 flex-1">
                           <div className="flex items-center gap-2">
@@ -326,7 +326,7 @@ export default function FacultyWorkloadTab({ workloadData, onRefresh }) {
                 {f.assignedCourses.length > 0 && (
                   <button
                     onClick={() => openModalForFaculty(f)}
-                    className="px-3.5 py-1.5 text-xs font-bold text-sky-900 bg-sky-50 hover:bg-sky-100 border border-sky-200 rounded-xl transition-colors flex items-center gap-1.5 cursor-pointer shadow-2xs"
+                    className="px-3.5 py-1.5 text-xs font-bold text-slate-900 bg-white hover:bg-sky-50 border border-sky-200 rounded-xl transition-colors flex items-center gap-1.5 cursor-pointer shadow-2xs"
                   >
                     <ArrowRightLeft size={13} />
                     Reassign Section
