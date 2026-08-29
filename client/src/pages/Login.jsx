@@ -58,16 +58,6 @@ const ROLE_PRESETS = [
     legacyEmail: 'alice.student@univ.edu',
     password: 'demo123',
     icon: GraduationCap
-  },
-  {
-    id: 'admin',
-    label: 'Admin',
-    fullName: 'Administrator',
-    name: 'System Admin',
-    email: 'admin@univ.edu.in',
-    legacyEmail: 'admin@univ.edu',
-    password: 'demo123',
-    icon: ShieldCheck
   }
 ];
 
