@@ -161,7 +161,7 @@ export default function Sidebar() {
   return (
     <aside className="sidebar">
       {/* Brand Header */}
-      <div className="sidebar-logo" onClick={() => navigate('/')}>
+      <div className="sidebar-logo" onClick={() => navigate('/dashboard')}>
         <div className="logo-icon-wrapper">
           <GraduationCap size={18} className="text-slate-800" />
         </div>

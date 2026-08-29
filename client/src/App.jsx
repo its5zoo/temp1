@@ -37,7 +37,7 @@ export default function App() {
       <BrowserRouter>
         <Routes>
           {/* Public Pages */}
-          <Route path="/" element={<LandingPage />} />
+          <Route path="/" element={<Login />} />
           <Route path="/login" element={<Login />} />
           <Route path="/careers" element={<CareersPage />} />
           <Route path="/careers/apply/:jobId" element={<JobApplyPage />} />
