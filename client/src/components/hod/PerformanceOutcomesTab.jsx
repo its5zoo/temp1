@@ -201,79 +201,82 @@ export default function PerformanceOutcomesTab({ outcomesData }) {
 
       {/* Grade Distribution Recharts Graph */}
       <div className="bg-white rounded-2xl p-6 border border-sky-100 shadow-2xs space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-3 border-b border-slate-100">
           <div>
             <h3 className="font-extrabold text-base text-slate-900">
-              {chartView === 'grades' ? 'Course Grade Spread (A / B / C / F)' : 'Course Pass Rate Comparison'}
+              Course Grade Breakdown
             </h3>
-            <p className="text-xs text-slate-400 mt-0.5">Aggregated student grades across departmental modules</p>
+            <p className="text-xs text-slate-400 mt-0.5">Academic performance indicators by subject</p>
           </div>
 
-          {/* Toggle Switch */}
-          <div className="flex items-center gap-1.5 p-1 rounded-xl bg-sky-50/70 border border-sky-200">
-            <button
-              onClick={() => setChartView('grades')}
-              className={`px-3.5 py-1.5 text-xs font-bold rounded-lg transition-all ${
-                chartView === 'grades' ? 'bg-slate-900 text-white shadow-2xs' : 'text-slate-700 hover:text-slate-900'
-              }`}
-            >
-              Grade Counts
-            </button>
-            <button
-              onClick={() => setChartView('passRate')}
-              className={`px-3.5 py-1.5 text-xs font-bold rounded-lg transition-all ${
-                chartView === 'passRate' ? 'bg-slate-900 text-white shadow-2xs' : 'text-slate-700 hover:text-slate-900'
-              }`}
-            >
-              Pass Rate %
-            </button>
+          {/* Right Header Controls: Toggle + Inline Legend */}
+          <div className="flex flex-wrap items-center gap-4">
+            {/* View Mode Toggle Switch */}
+            <div className="flex items-center p-1 rounded-xl bg-slate-100/80 border border-slate-200 text-xs">
+              <button
+                onClick={() => setChartView('grades')}
+                className={`px-3.5 py-1.5 font-bold rounded-lg transition-all cursor-pointer ${
+                  chartView === 'grades' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-500 hover:text-slate-900'
+                }`}
+              >
+                Grade Counts
+              </button>
+              <button
+                onClick={() => setChartView('passRate')}
+                className={`px-3.5 py-1.5 font-bold rounded-lg transition-all cursor-pointer ${
+                  chartView === 'passRate' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-500 hover:text-slate-900'
+                }`}
+              >
+                Pass Rate (%)
+              </button>
+            </div>
+
+            {/* Inline Legend Dots */}
+            {chartView === 'grades' && (
+              <div className="flex items-center gap-3 text-xs font-semibold text-slate-600">
+                <span className="flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-[#0f172a]" /> A
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-[#334155]" /> B
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-[#94a3b8]" /> C
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-[#f43f5e]" /> F
+                </span>
+              </div>
+            )}
           </div>
         </div>
 
         {/* Chart View */}
-        <div className="h-64 w-full">
+        <div className="h-64 w-full pt-2">
           <ResponsiveContainer width="100%" height="100%">
             {chartView === 'grades' ? (
-              <BarChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-                <XAxis dataKey="name" tickLine={false} axisLine={{ stroke: '#cbd5e1' }} tick={{ fill: '#64748b', fontSize: 11 }} />
-                <YAxis tickLine={false} axisLine={{ stroke: '#cbd5e1' }} tick={{ fill: '#64748b', fontSize: 11 }} />
+              <BarChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }} barCategoryGap="28%" barGap={2}>
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f8fafc" />
+                <XAxis dataKey="name" tickLine={false} axisLine={{ stroke: '#f1f5f9' }} tick={{ fill: '#94a3b8', fontSize: 11, fontWeight: 'bold' }} />
+                <YAxis domain={[0, 60]} ticks={[0, 15, 30, 45, 60]} tickLine={false} axisLine={false} tick={{ fill: '#94a3b8', fontSize: 11 }} />
                 <Tooltip content={<CustomTooltip />} />
-                <Bar dataKey="Grade A" fill="#0f172a" stackId="a" radius={[0, 0, 0, 0]} />
-                <Bar dataKey="Grade B" fill="#0284c7" stackId="a" radius={[0, 0, 0, 0]} />
-                <Bar dataKey="Grade C" fill="#94a3b8" stackId="a" radius={[0, 0, 0, 0]} />
-                <Bar dataKey="Grade F (Fail)" fill="#e11d48" stackId="a" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="Grade A" fill="#0f172a" radius={[3, 3, 0, 0]} maxBarSize={18} />
+                <Bar dataKey="Grade B" fill="#334155" radius={[3, 3, 0, 0]} maxBarSize={18} />
+                <Bar dataKey="Grade C" fill="#94a3b8" radius={[3, 3, 0, 0]} maxBarSize={18} />
+                <Bar dataKey="Grade F (Fail)" fill="#f43f5e" radius={[3, 3, 0, 0]} maxBarSize={18} />
               </BarChart>
             ) : (
               <BarChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-                <XAxis dataKey="name" tickLine={false} axisLine={{ stroke: '#cbd5e1' }} tick={{ fill: '#64748b', fontSize: 11 }} />
-                <YAxis domain={[0, 100]} tickLine={false} axisLine={{ stroke: '#cbd5e1' }} tick={{ fill: '#64748b', fontSize: 11 }} />
-                <ReferenceLine y={75} stroke="#e11d48" strokeDasharray="3 3" label={{ value: 'Target 75%', fill: '#e11d48', fontSize: 10 }} />
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f8fafc" />
+                <XAxis dataKey="name" tickLine={false} axisLine={{ stroke: '#f1f5f9' }} tick={{ fill: '#94a3b8', fontSize: 11, fontWeight: 'bold' }} />
+                <YAxis domain={[0, 100]} ticks={[0, 25, 50, 75, 100]} tickLine={false} axisLine={false} tick={{ fill: '#94a3b8', fontSize: 11 }} />
+                <ReferenceLine y={75} stroke="#f43f5e" strokeDasharray="3 3" label={{ value: 'Target 75%', fill: '#f43f5e', fontSize: 10 }} />
                 <Tooltip content={<CustomTooltip />} />
-                <Bar dataKey="passRate" fill="#0f172a" radius={[6, 6, 0, 0]} />
+                <Bar dataKey="passRate" fill="#0f172a" radius={[4, 4, 0, 0]} maxBarSize={32} />
               </BarChart>
             )}
           </ResponsiveContainer>
         </div>
-
-        {/* Legend */}
-        {chartView === 'grades' && (
-          <div className="flex flex-wrap items-center justify-center gap-6 pt-3 border-t border-slate-100 text-xs font-semibold">
-            <span className="flex items-center gap-1.5 text-slate-700">
-              <span className="w-2.5 h-2.5 rounded-sm bg-slate-900" /> Grade A
-            </span>
-            <span className="flex items-center gap-1.5 text-slate-700">
-              <span className="w-2.5 h-2.5 rounded-sm bg-sky-600" /> Grade B
-            </span>
-            <span className="flex items-center gap-1.5 text-slate-700">
-              <span className="w-2.5 h-2.5 rounded-sm bg-slate-400" /> Grade C
-            </span>
-            <span className="flex items-center gap-1.5 text-slate-700">
-              <span className="w-2.5 h-2.5 rounded-sm bg-rose-600" /> Grade F (Fail)
-            </span>
-          </div>
-        )}
       </div>
 
       {/* Course Cards Detailed Breakdown */}
