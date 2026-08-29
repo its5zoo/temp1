@@ -14,7 +14,9 @@ import {
   MessageSquare, 
   Settings, 
   LogOut,
-  GraduationCap
+  GraduationCap,
+  Calendar,
+  FileText
 } from 'lucide-react';
 import './Sidebar.css';
 
@@ -49,18 +51,36 @@ const HOD_SECTIONS = [
   }
 ];
 
+const ADVISOR_SECTIONS = [
+  {
+    title: 'Overview',
+    items: [
+      { label: 'Dashboard', path: '/dashboard?tab=dashboard', tab: 'dashboard', icon: LayoutDashboard },
+    ]
+  },
+  {
+    title: 'Caseload Management',
+    items: [
+      { label: 'Students', path: '/dashboard?tab=students', tab: 'students', icon: Users },
+      { label: 'Performance', path: '/dashboard?tab=performance', tab: 'performance', icon: TrendingUp },
+    ]
+  },
+  {
+    title: 'Engagement & Actions',
+    items: [
+      { label: 'Meetings', path: '/dashboard?tab=meetings', tab: 'meetings', icon: Calendar },
+      { label: 'Messages', path: '/dashboard?tab=messages', tab: 'messages', icon: MessageSquare },
+      { label: 'Reports', path: '/dashboard?tab=reports', tab: 'reports', icon: FileText },
+    ]
+  }
+];
+
 const OTHER_ROLE_ITEMS = {
   adjunct_faculty: [
     { label: 'Teaching Portal', path: '/dashboard', icon: LayoutDashboard },
     { label: 'My Courses', path: '/dashboard/courses', icon: BookOpen },
     { label: 'Doubts & Inbox', path: '/dashboard/messages', icon: MessageSquare },
     { label: 'Staff Directory', path: '/dashboard/users', icon: Users },
-    { label: 'Settings', path: '/dashboard/settings', icon: Settings },
-  ],
-  advisor: [
-    { label: 'Student Caseload', path: '/dashboard', icon: LayoutDashboard },
-    { label: 'Student Directory', path: '/dashboard/users', icon: Users },
-    { label: 'Messages', path: '/dashboard/messages', icon: MessageSquare },
     { label: 'Settings', path: '/dashboard/settings', icon: Settings },
   ],
   student: [
@@ -93,8 +113,17 @@ export default function Sidebar() {
   };
 
   const isHOD = userRole === 'hod' || !userRole;
+  const isAdvisor = userRole === 'advisor';
 
   const isItemActive = (item) => {
+    if (isAdvisor) {
+      if (item.tab) {
+        if (!currentTab && item.tab === 'dashboard') return true;
+        return currentTab === item.tab;
+      }
+      return location.pathname === item.path;
+    }
+
     if (item.tab) {
       if (location.pathname === item.path) return true;
       if (location.pathname === '/dashboard' && currentTab === item.tab) return true;
@@ -144,6 +173,28 @@ export default function Sidebar() {
               </div>
             </div>
           ))
+        ) : isAdvisor ? (
+          ADVISOR_SECTIONS.map((section, sIdx) => (
+            <div key={sIdx} className="nav-section">
+              <div className="section-header">{section.title}</div>
+              <div className="section-items">
+                {section.items.map((item) => {
+                  const Icon = item.icon;
+                  const active = isItemActive(item);
+                  return (
+                    <button
+                      key={item.label}
+                      className={`nav-item ${active ? 'active' : ''}`}
+                      onClick={() => handleNavigate(item)}
+                    >
+                      {Icon && <Icon size={16} className="nav-icon shrink-0" />}
+                      <span className="truncate">{item.label}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          ))
         ) : (
           <div className="nav-section">
             <div className="section-header">Navigation</div>
@@ -172,7 +223,9 @@ export default function Sidebar() {
         <div className="user-avatar">{user?.name?.charAt(0) || 'U'}</div>
         <div className="user-info">
           <p className="user-name">{user?.name || 'User'}</p>
-          <p className="user-role">{user?.role ? user.role.replace('_', ' ') : 'Department Chair'}</p>
+          <p className="user-role">
+            {isHOD ? 'Department Chair' : isAdvisor ? 'Academic Advisor' : user?.role ? user.role.replace('_', ' ') : 'Faculty'}
+          </p>
         </div>
         <button className="logout-btn" onClick={handleLogout} title="Logout">
           <LogOut size={15} />

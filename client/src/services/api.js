@@ -10,22 +10,27 @@ export const getDemoAccounts = () => API.get('/auth/demo-accounts');
 
 // --- HOD Suite Endpoints ---
 export const getHODOverview = () => API.get('/dashboard/hod/overview');
-
 export const getFacultyWorkload = () => API.get('/dashboard/hod/workload');
 export const rebalanceFacultyWorkload = (payload) => API.post('/dashboard/hod/workload/rebalance', payload);
-
 export const getAdvisorCaseload = () => API.get('/dashboard/hod/advisors');
 export const redistributeAdvisorCaseload = (payload) => API.post('/dashboard/hod/advisors/redistribute', payload);
-
 export const getRecruitmentPipeline = () => API.get('/dashboard/hod/recruitment');
 export const updateApplicantStatus = (payload) => API.post('/dashboard/hod/recruitment/update-status', payload);
 export const createJobRequisition = (payload) => API.post('/dashboard/hod/recruitment/requisitions', payload);
-
 export const getOnboardingTracker = () => API.get('/dashboard/hod/onboarding');
 export const updateOnboardingTask = (payload) => API.post('/dashboard/hod/onboarding/update-task', payload);
 export const activateFacultyCandidate = (payload) => API.post('/dashboard/hod/onboarding/activate', payload);
-
 export const getStudentOutcomes = () => API.get('/dashboard/hod/outcomes');
+
+// --- Advisor Portal Suite Endpoints ---
+export const getAdvisorPortalOverview = () => API.get('/advisor/overview');
+export const getAdvisorPortalStudents = () => API.get('/advisor/students');
+export const updateAdvisorStudentNotes = (studentId, notes) => API.post(`/advisor/students/${studentId}/notes`, { notes });
+export const getAdvisorPortalPerformance = () => API.get('/advisor/performance');
+export const getAdvisorPortalMeetings = () => API.get('/advisor/meetings');
+export const scheduleAdvisorPortalMeeting = (payload) => API.post('/advisor/meetings/schedule', payload);
+export const updateAdvisorMeetingStatus = (meetingId, status) => API.post(`/advisor/meetings/${meetingId}/status`, { status });
+export const getAdvisorPortalReports = () => API.get('/advisor/reports');
 
 // --- Legacy & Other Dashboards ---
 export const getHODStats = () => API.get('/dashboard/hod/stats');
