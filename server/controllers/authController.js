@@ -70,11 +70,11 @@ function normalizeRole(role) {
 }
 
 const ROLE_DISPLAY_NAMES = {
-  hod: 'HOD / Department Chair',
-  adjunct_faculty: 'Faculty Member',
-  advisor: 'Academic Advisor',
+  hod: 'HOD',
+  adjunct_faculty: 'Faculty',
+  advisor: 'Advisor',
   student: 'Student',
-  admin: 'System Administrator'
+  admin: 'Admin'
 };
 
 // Strict Role-Based Authentication
@@ -94,7 +94,7 @@ const loginByEmail = async (req, res) => {
   if (!userProfile) {
     try {
       const data = await supabase('profiles').selectOne(`email=eq.${encodeURIComponent(cleanEmail)}&select=*`);
-      if (data && !data.code) {
+      if (data && !data.code && data.email) {
         userProfile = data;
       }
     } catch (e) {
@@ -102,33 +102,22 @@ const loginByEmail = async (req, res) => {
     }
   }
 
-  // 3. If account not found at all
+  // 3. If account is NOT found in the system, show clean "Account Not Found" error (no false role assumptions)
   if (!userProfile) {
-    // Determine inferred role from email if user typed custom email
-    let inferredRole = 'student';
-    if (cleanEmail.includes('hod') || cleanEmail.includes('chair')) inferredRole = 'hod';
-    else if (cleanEmail.includes('faculty') || cleanEmail.includes('adjunct') || cleanEmail.includes('prof')) inferredRole = 'adjunct_faculty';
-    else if (cleanEmail.includes('advisor')) inferredRole = 'advisor';
-    else if (cleanEmail.includes('admin')) inferredRole = 'admin';
-
-    userProfile = {
-      id: `u_${Date.now().toString().slice(-4)}`,
-      name: cleanEmail.split('@')[0].replace('.', ' ').replace(/\b\w/g, l => l.toUpperCase()),
-      email: cleanEmail,
-      role: inferredRole,
-      department: 'Computer Science'
-    };
+    return res.status(404).json({
+      error: `No account found for "${cleanEmail}". Please check your email or choose a valid demo role.`
+    });
   }
 
   const userActualRole = normalizeRole(userProfile.role);
 
-  // 4. Strict Role-Based Access Control (RBAC) Enforcement
+  // 4. Strict Role Mismatch Check
   if (normalizedRequestedRole && userActualRole !== normalizedRequestedRole) {
     const actualRoleLabel = ROLE_DISPLAY_NAMES[userActualRole] || userActualRole;
     const requestedRoleLabel = ROLE_DISPLAY_NAMES[normalizedRequestedRole] || normalizedRequestedRole;
 
     return res.status(403).json({
-      error: `Access Denied: "${cleanEmail}" is registered as ${actualRoleLabel}. You cannot log in through the ${requestedRoleLabel} portal.`
+      error: `Role Mismatch: "${cleanEmail}" is registered as ${actualRoleLabel}. Please switch to the ${actualRoleLabel} tab to sign in.`
     });
   }
 

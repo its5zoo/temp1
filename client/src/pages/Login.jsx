@@ -154,9 +154,9 @@ export default function Login() {
 
           {/* Error Message */}
           {error && (
-            <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs font-semibold flex items-center gap-2">
-              <AlertCircle size={15} className="shrink-0 text-rose-600" />
-              <span>{error}</span>
+            <div className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-900 text-xs font-medium flex items-start gap-2.5 leading-relaxed">
+              <AlertCircle size={16} className="shrink-0 text-rose-600 mt-0.5" />
+              <span className="font-semibold text-rose-900">{error}</span>
             </div>
           )}
 
