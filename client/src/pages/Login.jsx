@@ -240,7 +240,7 @@ export default function Login() {
               disabled={loading}
               className="w-full py-3 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm flex items-center justify-center gap-2 transition-all cursor-pointer shadow-xs disabled:opacity-50"
             >
-              <span>{loading ? 'Signing in...' : 'Sign In'}</span>
+              <span>{loading ? 'Signing in...' : `Sign In as ${ROLE_PRESETS.find(r => r.id === selectedRole)?.label || 'User'} (Demo)`}</span>
               <ArrowRight size={15} />
             </button>
           </form>
