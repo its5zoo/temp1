@@ -150,7 +150,7 @@ export default function Login() {
             <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block text-center">
               Choose Role
             </span>
-            <div className="grid grid-cols-5 gap-1.5 p-1 bg-slate-100 rounded-xl border border-slate-200">
+            <div className="grid grid-cols-4 gap-1 p-1 bg-slate-100 rounded-xl border border-slate-200">
               {ROLE_PRESETS.map((r) => {
                 const isSelected = selectedRole === r.id;
                 return (
@@ -158,13 +158,13 @@ export default function Login() {
                     key={r.id}
                     type="button"
                     onClick={() => handleRoleSelect(r)}
-                    className={`py-1.5 text-xs font-bold rounded-lg transition-all text-center cursor-pointer ${
+                    className={`py-2 px-1 text-xs font-bold rounded-lg transition-all text-center flex items-center justify-center cursor-pointer min-h-[38px] leading-tight ${
                       isSelected 
                         ? 'bg-slate-900 text-white shadow-xs' 
                         : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/50'
                     }`}
                   >
-                    {r.label}
+                    <span className="truncate">{r.label}</span>
                   </button>
                 );
               })}
