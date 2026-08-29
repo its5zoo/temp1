@@ -5,7 +5,7 @@ const API = axios.create({
 });
 
 // --- Auth ---
-export const loginByEmail = (email) => API.post('/auth/login', { email });
+export const loginByEmail = (email, role) => API.post('/auth/login', { email, role });
 export const getDemoAccounts = () => API.get('/auth/demo-accounts');
 
 // --- HOD Suite Endpoints ---

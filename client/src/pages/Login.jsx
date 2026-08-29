@@ -82,14 +82,14 @@ export default function Login() {
     setLoading(true);
 
     try {
-      await login(targetEmail);
+      await login(targetEmail, selectedRole);
       navigate('/dashboard');
-    } catch {
-      try {
-        await login('alan.hod@univ.edu');
-        navigate('/dashboard');
-      } catch {
-        setError('No account found for this email. Try clicking one of the demo buttons below.');
+    } catch (err) {
+      const serverMsg = err.response?.data?.error;
+      if (serverMsg) {
+        setError(serverMsg);
+      } else {
+        setError(`Access Denied: This account is not authorized for the ${ROLE_PRESETS.find(r => r.id === selectedRole)?.label} portal.`);
       }
     } finally {
       setLoading(false);
