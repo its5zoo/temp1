@@ -5,10 +5,10 @@ import {
   Send, 
   Bot, 
   CheckCircle2, 
-  Sparkles,
-  Clock,
+  Clock, 
   User
 } from 'lucide-react';
+import SmartIcon from '../components/common/SmartIcon';
 
 export default function Messages() {
   const { user } = useAuth();
@@ -199,7 +199,7 @@ export default function Messages() {
             {selectedDoubt.aiResponse && (
               <div className="p-4.5 rounded-xl bg-slate-50/80 border border-slate-200">
                 <div className="flex items-center gap-2 mb-2 text-sm font-bold text-slate-900">
-                  <Sparkles size={16} className="text-slate-700" />
+                  <SmartIcon size={18} className="text-slate-800" />
                   <span>AI Copilot Verified Solution</span>
                 </div>
                 <p className="text-sm text-slate-700 leading-relaxed">{selectedDoubt.aiResponse}</p>

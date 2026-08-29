@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { 
   Scale, 
-  Sparkles, 
   ArrowRightLeft, 
   Clock, 
   BookOpen, 
@@ -11,6 +10,7 @@ import {
   Info, 
   X
 } from 'lucide-react';
+import SmartIcon from '../common/SmartIcon';
 import { rebalanceFacultyWorkload } from '../../services/api';
 
 export default function FacultyWorkloadTab({ workloadData, onRefresh }) {
@@ -156,7 +156,7 @@ export default function FacultyWorkloadTab({ workloadData, onRefresh }) {
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
             <div className="flex items-start gap-3.5">
               <div className="p-2.5 rounded-xl bg-slate-100 text-slate-800 border border-slate-200 shrink-0">
-                <Sparkles size={18} />
+                <SmartIcon size={20} />
               </div>
               <div>
                 <div className="flex items-center gap-2">
