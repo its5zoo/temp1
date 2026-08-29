@@ -155,28 +155,6 @@ export default function AdvisorDashboard({ initialTab = 'dashboard' }) {
         </button>
       </div>
 
-      {/* Tab Selector Bar */}
-      <div className="flex items-center gap-1.5 p-1.5 bg-white rounded-2xl border border-sky-100 shadow-2xs overflow-x-auto custom-scrollbar">
-        {TABS.map((tab) => {
-          const Icon = tab.icon;
-          const isActive = activeTab === tab.id;
-          return (
-            <button
-              key={tab.id}
-              onClick={() => handleTabChange(tab.id)}
-              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all shrink-0 cursor-pointer ${
-                isActive
-                  ? 'bg-slate-900 text-white shadow-xs'
-                  : 'text-slate-600 hover:text-slate-900 hover:bg-sky-50/50'
-              }`}
-            >
-              <Icon size={15} />
-              <span>{tab.label}</span>
-            </button>
-          );
-        })}
-      </div>
-
       {/* Main Tab Render */}
       {loading ? (
         <div className="flex flex-col items-center justify-center py-20 bg-white rounded-2xl border border-sky-100 shadow-2xs">
