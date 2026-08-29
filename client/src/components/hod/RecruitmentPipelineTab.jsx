@@ -15,9 +15,11 @@ import {
   Sparkles,
   ChevronRight,
   ArrowLeft,
-  LayoutList,
-  Kanban,
-  ExternalLink
+  Building,
+  GraduationCap,
+  Users,
+  Calendar,
+  FileText
 } from 'lucide-react';
 import { updateApplicantStatus, createJobRequisition } from '../../services/api';
 
@@ -25,7 +27,6 @@ const STAGES = ['Applied', 'Screening', 'Interview', 'Selected', 'Onboarding'];
 
 export default function RecruitmentPipelineTab({ recruitmentData, onRefresh }) {
   const { requisitions = [], applicants = [] } = recruitmentData || {};
-  const [viewMode, setViewMode] = useState('table'); // 'table' or 'kanban'
   const [search, setSearch] = useState('');
   const [selectedReq, setSelectedReq] = useState('all');
   const [selectedStageFilter, setSelectedStageFilter] = useState('all');
@@ -56,29 +57,12 @@ export default function RecruitmentPipelineTab({ recruitmentData, onRefresh }) {
         applicantId: applicant.id,
         newStatus: newStage
       });
-      showToast('Status Updated', `Moved ${applicant.name} to: ${newStage}`);
+      showToast('Candidate Stage Updated', `Moved ${applicant.name} to: ${newStage}`);
       if (onRefresh) onRefresh();
     } catch (err) {
       showToast('Error', 'Failed to update candidate stage');
     } finally {
       setUpdating(false);
-    }
-  };
-
-  const handleDragStart = (e, applicantId) => {
-    e.dataTransfer.setData('applicantId', applicantId);
-  };
-
-  const handleDragOver = (e) => {
-    e.preventDefault();
-  };
-
-  const handleDrop = (e, targetStage) => {
-    e.preventDefault();
-    const applicantId = e.dataTransfer.getData('applicantId');
-    const applicant = applicants.find(a => a.id === applicantId);
-    if (applicant && applicant.status !== targetStage) {
-      handleStageChange(applicant, targetStage);
     }
   };
 
@@ -111,325 +95,276 @@ export default function RecruitmentPipelineTab({ recruitmentData, onRefresh }) {
     return matchesSearch && matchesReq && matchesStage;
   });
 
+  const inInterviewCount = applicants.filter(a => a.status === 'Interview').length;
+  const selectedCount = applicants.filter(a => a.status === 'Selected').length;
+  const totalOpenings = requisitions.reduce((sum, r) => sum + (r.positions || 1), 0);
+
   return (
     <div className="space-y-6 w-full max-w-full">
       {/* Toast Notification */}
       {toast && (
-        <div className="fixed bottom-6 right-6 z-50 p-4 rounded-xl shadow-lg bg-slate-900 border border-slate-700 text-white flex items-center gap-3 animate-in slide-in-from-bottom-5 text-sm">
-          <Mail className="text-emerald-400" size={18} />
+        <div className="fixed bottom-6 right-6 z-50 p-4 rounded-xl shadow-lg bg-slate-900 border border-slate-700 text-white flex items-center gap-3 animate-in slide-in-from-bottom-5 text-sm font-semibold">
+          <CheckCircle2 className="text-emerald-400" size={18} />
           <div>
             <p className="font-bold">{toast.title}</p>
-            <p className="text-xs text-slate-300">{toast.msg}</p>
+            <p className="text-xs text-slate-300 font-normal">{toast.msg}</p>
           </div>
         </div>
       )}
 
-      {/* Header & Open Requisitions */}
-      <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-2xs space-y-5">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div>
-            <div className="flex items-center gap-3">
-              <span className="p-2.5 rounded-xl bg-slate-900 text-white font-bold text-sm flex items-center justify-center">
-                <UserPlus size={20} />
-              </span>
-              <h2 className="text-2xl font-extrabold text-slate-900 tracking-tight">Faculty Recruitment ATS Pipeline</h2>
-            </div>
-            <p className="text-sm text-slate-500 mt-1">
-              Candidate tracking with qualification scoring, candidate dossiers, and direct stage management.
-            </p>
+      {/* Header Banner */}
+      <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-2xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <div className="flex items-center gap-3">
+            <span className="p-2.5 rounded-xl bg-slate-900 text-white font-bold text-sm flex items-center justify-center">
+              <UserPlus size={20} />
+            </span>
+            <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">
+              Faculty Recruitment & ATS
+            </h1>
           </div>
-
-          <button
-            onClick={() => setNewReqModalOpen(true)}
-            className="px-5 py-2.5 text-sm font-semibold bg-slate-900 hover:bg-slate-800 text-white rounded-xl shadow-xs flex items-center gap-2 transition-all cursor-pointer"
-          >
-            <Plus size={16} />
-            Create Job Requisition
-          </button>
+          <p className="text-sm text-slate-500 mt-1">
+            Department hiring pipeline, candidate qualification dossiers, and search committee milestones.
+          </p>
         </div>
 
-        {/* Requisitions List */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pt-1">
+        <button
+          onClick={() => setNewReqModalOpen(true)}
+          className="px-5 py-2.5 text-sm font-bold bg-slate-900 hover:bg-slate-800 text-white rounded-xl shadow-xs flex items-center gap-2 transition-all cursor-pointer self-start md:self-auto"
+        >
+          <Plus size={16} />
+          Create Job Requisition
+        </button>
+      </div>
+
+      {/* 4-Metric Executive Overview Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-2xs flex items-center justify-between">
+          <div>
+            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block">Active Openings</span>
+            <span className="text-2xl font-black text-slate-900 mt-1 block">{totalOpenings} Positions</span>
+            <span className="text-xs text-slate-500 mt-0.5 block">{requisitions.length} Requisitions</span>
+          </div>
+          <div className="w-10 h-10 rounded-xl bg-slate-100 text-slate-800 border border-slate-200 flex items-center justify-center">
+            <Briefcase size={18} />
+          </div>
+        </div>
+
+        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-2xs flex items-center justify-between">
+          <div>
+            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block">Total Candidates</span>
+            <span className="text-2xl font-black text-slate-900 mt-1 block">{applicants.length} Applicants</span>
+            <span className="text-xs text-slate-500 mt-0.5 block">Vetted by Committee</span>
+          </div>
+          <div className="w-10 h-10 rounded-xl bg-slate-100 text-slate-800 border border-slate-200 flex items-center justify-center">
+            <Users size={18} />
+          </div>
+        </div>
+
+        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-2xs flex items-center justify-between">
+          <div>
+            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block">In Interview / Final</span>
+            <span className="text-2xl font-black text-slate-900 mt-1 block">{inInterviewCount + selectedCount} Faculty</span>
+            <span className="text-xs text-slate-500 mt-0.5 block">{inInterviewCount} Interview • {selectedCount} Selected</span>
+          </div>
+          <div className="w-10 h-10 rounded-xl bg-slate-100 text-slate-800 border border-slate-200 flex items-center justify-center">
+            <GraduationCap size={18} />
+          </div>
+        </div>
+
+        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-2xs flex items-center justify-between">
+          <div>
+            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block">Avg Time to Hire</span>
+            <span className="text-2xl font-black text-slate-900 mt-1 block">14 Days</span>
+            <span className="text-xs text-emerald-700 font-semibold mt-0.5 block">On Target (Term Fall 2026)</span>
+          </div>
+          <div className="w-10 h-10 rounded-xl bg-slate-100 text-slate-800 border border-slate-200 flex items-center justify-center">
+            <Clock size={18} />
+          </div>
+        </div>
+      </div>
+
+      {/* Active Requisitions Grid */}
+      <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-2xs space-y-4">
+        <div className="flex items-center justify-between">
+          <h3 className="font-extrabold text-base text-slate-900">Active Job Requisitions</h3>
+          <span className="text-xs font-semibold text-slate-500">{requisitions.length} Open Positions</span>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {requisitions.map((req) => (
             <div
               key={req.id}
               onClick={() => setSelectedReq(selectedReq === req.id ? 'all' : req.id)}
-              className={`p-4 rounded-2xl border cursor-pointer transition-all ${
+              className={`p-4 rounded-2xl border cursor-pointer transition-all flex flex-col justify-between ${
                 selectedReq === req.id 
                   ? 'bg-slate-50 border-slate-900 ring-1 ring-slate-900' 
                   : 'bg-white hover:bg-slate-50/70 border-slate-200'
               }`}
             >
-              <div className="flex items-center justify-between mb-1.5">
-                <span className="text-xs font-bold text-slate-900 bg-slate-100 px-2 py-0.5 rounded border border-slate-200 font-mono">
-                  {req.id}
-                </span>
-                <span className={`text-xs font-bold px-2.5 py-0.5 rounded-full ${
-                  req.urgency === 'High' ? 'bg-rose-50 text-rose-700 border border-rose-200' : 'bg-amber-50 text-amber-700 border border-amber-200'
-                }`}>
-                  {req.urgency} Urgency
-                </span>
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-xs font-mono font-bold text-slate-900 bg-slate-100 px-2 py-0.5 rounded border border-slate-200">
+                    {req.id}
+                  </span>
+                  <span className={`text-xs font-bold px-2.5 py-0.5 rounded-full ${
+                    req.urgency === 'High' ? 'bg-rose-50 text-rose-700 border border-rose-200' : 'bg-amber-50 text-amber-700 border border-amber-200'
+                  }`}>
+                    {req.urgency} Urgency
+                  </span>
+                </div>
+                <h4 className="font-bold text-sm text-slate-900 mt-1 leading-snug">{req.title}</h4>
+                <p className="text-xs text-slate-500 mt-0.5">{req.department}</p>
               </div>
-              <h4 className="font-bold text-sm text-slate-900 mt-1.5 truncate">{req.title}</h4>
-              <div className="flex justify-between items-center text-xs text-slate-500 font-medium mt-2.5">
-                <span>{req.hourlyRate}</span>
-                <span className="font-semibold text-slate-700">{req.positions} Open Position</span>
+
+              <div className="flex justify-between items-center text-xs text-slate-600 font-medium mt-4 pt-3 border-t border-slate-100">
+                <span className="font-bold text-slate-900">{req.hourlyRate}</span>
+                <span className="bg-slate-100 px-2 py-0.5 rounded text-slate-800 font-semibold">{req.positions} Position</span>
               </div>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Toolbar with Table/Kanban Switcher */}
-      <div className="flex flex-col md:flex-row justify-between items-center gap-4 bg-white p-4 rounded-2xl border border-slate-200 shadow-2xs">
-        <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
-          {/* Search Box */}
-          <div className="relative w-full sm:w-72">
-            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
-            <input
-              type="text"
-              placeholder="Search candidates..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-slate-900 focus:bg-white transition-all"
-            />
-          </div>
+      {/* Candidate Filter & Search Toolbar */}
+      <div className="flex flex-col sm:flex-row justify-between items-center gap-4 bg-white p-4 rounded-2xl border border-slate-200 shadow-2xs">
+        <div className="relative w-full sm:w-80">
+          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
+          <input
+            type="text"
+            placeholder="Search candidates, credentials, skills..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-slate-900 focus:bg-white transition-all"
+          />
+        </div>
+
+        <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
+          {/* Requisition Filter */}
+          <select
+            value={selectedReq}
+            onChange={(e) => setSelectedReq(e.target.value)}
+            className="bg-slate-50 text-slate-900 text-sm font-semibold border border-slate-200 rounded-xl px-3.5 py-2 outline-none focus:border-slate-900"
+          >
+            <option value="all">All Requisitions</option>
+            {requisitions.map(r => (
+              <option key={r.id} value={r.id}>{r.id} - {r.title}</option>
+            ))}
+          </select>
 
           {/* Stage Filter */}
           <select
             value={selectedStageFilter}
             onChange={(e) => setSelectedStageFilter(e.target.value)}
-            className="bg-slate-50 text-slate-900 text-sm font-semibold border border-slate-200 rounded-xl px-3 py-2 outline-none focus:border-slate-900"
+            className="bg-slate-50 text-slate-900 text-sm font-semibold border border-slate-200 rounded-xl px-3.5 py-2 outline-none focus:border-slate-900"
           >
-            <option value="all">All Stages</option>
+            <option value="all">All Pipeline Stages</option>
             {STAGES.map(s => <option key={s} value={s}>{s}</option>)}
           </select>
-        </div>
 
-        {/* View Mode Toggle & Stats */}
-        <div className="flex items-center gap-3 w-full md:w-auto justify-between md:justify-end">
-          <div className="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200">
-            <button
-              onClick={() => setViewMode('table')}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                viewMode === 'table' ? 'bg-white text-slate-900 shadow-2xs' : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              <LayoutList size={15} />
-              Table View
-            </button>
-            <button
-              onClick={() => setViewMode('kanban')}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                viewMode === 'kanban' ? 'bg-white text-slate-900 shadow-2xs' : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              <Kanban size={15} />
-              Kanban Board
-            </button>
-          </div>
-
-          <span className="font-bold text-slate-900 bg-slate-100 px-3 py-1.5 rounded-xl border border-slate-200 text-xs">
+          <span className="font-bold text-slate-900 bg-slate-100 px-3 py-2 rounded-xl border border-slate-200 text-xs">
             {filteredApplicants.length} Candidates
           </span>
         </div>
       </div>
 
-      {/* TABLE VIEW (Default - No Screen Overflow) */}
-      {viewMode === 'table' && (
-        <div className="bg-white rounded-2xl border border-slate-200 shadow-2xs overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse">
-              <thead>
-                <tr className="bg-slate-50/80 border-b border-slate-200 text-xs font-bold text-slate-500 uppercase tracking-wider">
-                  <th className="py-4 px-5">Candidate</th>
-                  <th className="py-4 px-5">Degree & University</th>
-                  <th className="py-4 px-5">Req / Rate</th>
-                  <th className="py-4 px-5">Match Score</th>
-                  <th className="py-4 px-5">Pipeline Stage</th>
-                  <th className="py-4 px-5 text-right">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100 text-sm">
-                {filteredApplicants.map((cand) => (
-                  <tr 
-                    key={cand.id}
-                    className="hover:bg-slate-50/60 transition-colors"
-                  >
-                    {/* Candidate */}
-                    <td className="py-4 px-5">
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-xl bg-slate-900 text-white font-extrabold text-sm flex items-center justify-center shadow-xs shrink-0">
-                          {cand.name.split(' ').map(n => n[0]).join('')}
-                        </div>
-                        <div>
-                          <h4 
-                            onClick={() => setCandidateModal(cand)}
-                            className="font-bold text-slate-900 hover:underline cursor-pointer"
-                          >
-                            {cand.name}
-                          </h4>
-                          <span className="text-xs text-slate-400 font-medium">{cand.email}</span>
-                        </div>
-                      </div>
-                    </td>
-
-                    {/* Degree */}
-                    <td className="py-4 px-5 font-medium text-slate-700">
-                      <span className="line-clamp-1">{cand.degree}</span>
-                      <span className="text-xs text-slate-400 font-normal">{cand.experienceYears} Years Exp</span>
-                    </td>
-
-                    {/* Requisition & Rate */}
-                    <td className="py-4 px-5">
-                      <span className="font-mono text-xs font-bold text-slate-800 bg-slate-100 px-2 py-0.5 rounded border border-slate-200">
-                        {cand.jobId}
-                      </span>
-                      <p className="text-xs text-slate-900 font-bold mt-1">{cand.expectedHourlyRate}/hr</p>
-                    </td>
-
-                    {/* Match Score */}
-                    <td className="py-4 px-5">
-                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
-                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                        {cand.matchScore}% Match
-                      </span>
-                    </td>
-
-                    {/* Stage Selector */}
-                    <td className="py-4 px-5">
-                      <select
-                        value={cand.status}
-                        onChange={(e) => handleStageChange(cand, e.target.value)}
-                        className="bg-slate-50 text-slate-900 text-xs font-bold border border-slate-200 rounded-lg px-2.5 py-1.5 outline-none focus:border-slate-900 cursor-pointer"
-                      >
-                        {STAGES.map(s => (
-                          <option key={s} value={s}>{s}</option>
-                        ))}
-                      </select>
-                    </td>
-
-                    {/* Actions */}
-                    <td className="py-4 px-5 text-right">
-                      <button
-                        onClick={() => setCandidateModal(cand)}
-                        className="px-3.5 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs shadow-2xs transition-all cursor-pointer inline-flex items-center gap-1"
-                      >
-                        <span>Dossier</span>
-                        <ChevronRight size={14} />
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-
-                {filteredApplicants.length === 0 && (
-                  <tr>
-                    <td colSpan={6} className="py-12 text-center text-slate-400 text-sm">
-                      No candidates match the selected filters.
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      )}
-
-      {/* KANBAN BOARD VIEW (With Smooth Scrolling) */}
-      {viewMode === 'kanban' && (
-        <div className="overflow-x-auto pb-6">
-          <div className="flex gap-4 min-w-[1000px] items-start">
-            {STAGES.map((stage) => {
-              const stageCandidates = filteredApplicants.filter(a => a.status === stage);
-
-              return (
-                <div
-                  key={stage}
-                  onDragOver={handleDragOver}
-                  onDrop={(e) => handleDrop(e, stage)}
-                  className="flex-1 bg-slate-50/60 rounded-2xl border border-slate-200 flex flex-col min-w-[190px]"
+      {/* Candidate Pipeline Table (Full Width & No Screen Overflow) */}
+      <div className="bg-white rounded-2xl border border-slate-200 shadow-2xs overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full text-left border-collapse">
+            <thead>
+              <tr className="bg-slate-50/80 border-b border-slate-200 text-xs font-bold text-slate-500 uppercase tracking-wider">
+                <th className="py-4 px-5">Candidate Name</th>
+                <th className="py-4 px-5">Academic Credentials</th>
+                <th className="py-4 px-5">Requisition & Rate</th>
+                <th className="py-4 px-5">Match Score</th>
+                <th className="py-4 px-5">Pipeline Stage</th>
+                <th className="py-4 px-5 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100 text-sm">
+              {filteredApplicants.map((cand) => (
+                <tr 
+                  key={cand.id}
+                  className="hover:bg-slate-50/60 transition-colors"
                 >
-                  {/* Clean Column Header */}
-                  <div className="p-3.5 rounded-t-2xl border-b border-slate-200 bg-white flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <span className="font-extrabold text-xs uppercase tracking-wider text-slate-900">{stage}</span>
-                      <span className="w-5 h-5 rounded-full bg-slate-900 text-white text-xs font-bold flex items-center justify-center shadow-2xs">
-                        {stageCandidates.length}
-                      </span>
+                  {/* Candidate Profile */}
+                  <td className="py-4 px-5">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-xl bg-slate-900 text-white font-extrabold text-sm flex items-center justify-center shadow-xs shrink-0">
+                        {cand.name.split(' ').map(n => n[0]).join('')}
+                      </div>
+                      <div>
+                        <h4 
+                          onClick={() => setCandidateModal(cand)}
+                          className="font-extrabold text-slate-900 hover:underline cursor-pointer text-sm"
+                        >
+                          {cand.name}
+                        </h4>
+                        <span className="text-xs text-slate-400 font-medium block">{cand.email}</span>
+                      </div>
                     </div>
-                  </div>
+                  </td>
 
-                  {/* Cards Container */}
-                  <div className="p-3 overflow-y-auto flex-1 space-y-3">
-                    {stageCandidates.map((cand) => (
-                      <div
-                        key={cand.id}
-                        draggable
-                        onDragStart={(e) => handleDragStart(e, cand.id)}
-                        onClick={() => setCandidateModal(cand)}
-                        className="bg-white p-4 rounded-xl border border-slate-200 shadow-2xs hover:shadow-md hover:border-slate-300 transition-all cursor-grab active:cursor-grabbing group flex flex-col justify-between"
-                      >
-                        <div>
-                          <div className="flex items-start justify-between gap-1.5">
-                            <div>
-                              <h4 className="font-extrabold text-xs text-slate-900 group-hover:text-slate-700 transition-colors leading-snug">
-                                {cand.name}
-                              </h4>
-                              <span className="text-[11px] text-slate-400 font-mono">{cand.jobId}</span>
-                            </div>
-                            <span className="text-[11px] font-bold px-2 py-0.2 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200">
-                              {cand.matchScore}%
-                            </span>
-                          </div>
+                  {/* Degree & Experience */}
+                  <td className="py-4 px-5 font-medium text-slate-700">
+                    <p className="font-semibold text-slate-800 text-xs line-clamp-1">{cand.degree}</p>
+                    <span className="text-xs text-slate-400 font-normal">{cand.experienceYears} Years Academic Exp</span>
+                  </td>
 
-                          <p className="text-xs text-slate-700 font-semibold mt-2.5 p-2 rounded-lg bg-slate-50 border border-slate-200/70 line-clamp-2">
-                            {cand.degree}
-                          </p>
+                  {/* Requisition ID & Rate */}
+                  <td className="py-4 px-5">
+                    <span className="font-mono text-xs font-bold text-slate-800 bg-slate-100 px-2 py-0.5 rounded border border-slate-200">
+                      {cand.jobId}
+                    </span>
+                    <p className="text-xs text-slate-900 font-extrabold mt-1">{cand.expectedHourlyRate}/hr</p>
+                  </td>
 
-                          <div className="mt-2.5 pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500 font-medium">
-                            <span>{cand.experienceYears} Yrs</span>
-                            <span className="font-extrabold text-slate-900">{cand.expectedHourlyRate}/hr</span>
-                          </div>
-                        </div>
+                  {/* Match Score */}
+                  <td className="py-4 px-5">
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
+                      <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                      {cand.matchScore}% Match
+                    </span>
+                  </td>
 
-                        {/* Quick stage advance buttons */}
-                        <div className="mt-2.5 pt-2 border-t border-slate-100 flex items-center justify-between gap-1" onClick={(e) => e.stopPropagation()}>
-                          <span className="text-xs text-slate-400 font-medium">Stage:</span>
-                          <div className="flex items-center gap-1">
-                            {STAGES.indexOf(stage) > 0 && (
-                              <button
-                                onClick={() => handleStageChange(cand, STAGES[STAGES.indexOf(stage) - 1])}
-                                className="px-2 py-0.5 text-xs font-bold rounded bg-slate-100 hover:bg-slate-200 text-slate-800 transition-colors"
-                                title="Move back"
-                              >
-                                ←
-                              </button>
-                            )}
-                            {STAGES.indexOf(stage) < STAGES.length - 1 && (
-                              <button
-                                onClick={() => handleStageChange(cand, STAGES[STAGES.indexOf(stage) + 1])}
-                                className="px-2.5 py-0.5 text-xs font-bold rounded-lg bg-slate-900 hover:bg-slate-800 text-white flex items-center gap-1 shadow-2xs transition-colors"
-                              >
-                                Next →
-                              </button>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                    ))}
+                  {/* Stage Transition Dropdown */}
+                  <td className="py-4 px-5">
+                    <select
+                      value={cand.status}
+                      onChange={(e) => handleStageChange(cand, e.target.value)}
+                      className="bg-slate-50 text-slate-900 text-xs font-bold border border-slate-200 rounded-xl px-3 py-1.5 outline-none focus:border-slate-900 cursor-pointer shadow-2xs"
+                    >
+                      {STAGES.map(s => (
+                        <option key={s} value={s}>{s}</option>
+                      ))}
+                    </select>
+                  </td>
 
-                    {stageCandidates.length === 0 && (
-                      <div className="p-5 text-center text-xs text-slate-400 border border-dashed border-slate-300 rounded-xl bg-white/50">
-                        Drop candidate here
-                      </div>
-                    )}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+                  {/* Actions */}
+                  <td className="py-4 px-5 text-right">
+                    <button
+                      onClick={() => setCandidateModal(cand)}
+                      className="px-3.5 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs shadow-2xs transition-all cursor-pointer inline-flex items-center gap-1"
+                    >
+                      <span>Dossier</span>
+                      <ChevronRight size={14} />
+                    </button>
+                  </td>
+                </tr>
+              ))}
+
+              {filteredApplicants.length === 0 && (
+                <tr>
+                  <td colSpan={6} className="py-12 text-center text-slate-400 text-sm">
+                    No candidates match the selected filters.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
         </div>
-      )}
+      </div>
 
       {/* Candidate Details Dossier Modal */}
       {candidateModal && (
@@ -474,7 +409,7 @@ export default function RecruitmentPipelineTab({ recruitmentData, onRefresh }) {
               </div>
 
               <div>
-                <span className="font-bold text-slate-700 uppercase text-xs block mb-1.5">Contact Details</span>
+                <span className="font-bold text-slate-700 uppercase text-xs block mb-1.5">Contact Information</span>
                 <div className="flex items-center gap-4 text-slate-800 bg-slate-50 p-3 rounded-xl border border-slate-200 text-xs font-medium">
                   <span className="flex items-center gap-1.5"><Mail size={14} className="text-slate-500" /> {candidateModal.email}</span>
                   <span className="flex items-center gap-1.5"><Phone size={14} className="text-slate-500" /> {candidateModal.phone}</span>
@@ -482,14 +417,14 @@ export default function RecruitmentPipelineTab({ recruitmentData, onRefresh }) {
               </div>
 
               <div>
-                <span className="font-bold text-slate-700 uppercase text-xs block mb-1.5">Committee Assessment</span>
+                <span className="font-bold text-slate-700 uppercase text-xs block mb-1.5">Search Committee Evaluation</span>
                 <p className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-700 text-xs leading-relaxed">
-                  {candidateModal.notes || 'Candidate profile vetted by department search committee.'}
+                  {candidateModal.notes || 'Candidate profile vetted by department search committee. Recommended for immediate secondary interview round.'}
                 </p>
               </div>
 
               <div>
-                <span className="font-bold text-slate-700 uppercase text-xs block mb-1.5">Direct Stage Transition</span>
+                <span className="font-bold text-slate-700 uppercase text-xs block mb-1.5">Update Stage Directly</span>
                 <div className="flex flex-wrap gap-2">
                   {STAGES.map((s) => (
                     <button
