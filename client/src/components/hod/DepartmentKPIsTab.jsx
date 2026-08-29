@@ -34,10 +34,10 @@ export default function DepartmentKPIsTab({ overviewData, setActiveTab, onRefres
   return (
     <div className="space-y-6">
       {/* Academic Unit Header */}
-      <div className="bg-white rounded-2xl p-6 border border-sky-100 shadow-2xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-2xs flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-3">
-            <span className="p-2.5 rounded-xl bg-sky-50 text-sky-900 border border-sky-200 font-bold text-sm flex items-center justify-center">
+            <span className="p-2.5 rounded-xl bg-sky-900 text-white font-bold text-sm flex items-center justify-center">
               <Building2 size={20} />
             </span>
             <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">
@@ -53,7 +53,7 @@ export default function DepartmentKPIsTab({ overviewData, setActiveTab, onRefres
           <select 
             value={selectedSemester}
             onChange={(e) => setSelectedSemester(e.target.value)}
-            className="bg-sky-50/50 text-slate-900 text-sm font-semibold border border-sky-200/80 rounded-xl px-4 py-2.5 outline-none focus:border-slate-900 cursor-pointer"
+            className="bg-slate-50 text-slate-900 text-sm font-semibold border border-slate-200 rounded-xl px-4 py-2.5 outline-none focus:border-sky-900 cursor-pointer"
           >
             <option value="Fall 2026">Fall 2026 (Current Term)</option>
             <option value="Spring 2026">Spring 2026</option>
@@ -63,7 +63,7 @@ export default function DepartmentKPIsTab({ overviewData, setActiveTab, onRefres
           <select 
             value={selectedDept}
             onChange={(e) => setSelectedDept(e.target.value)}
-            className="bg-sky-50/50 text-slate-900 text-sm font-semibold border border-sky-200/80 rounded-xl px-4 py-2.5 outline-none focus:border-slate-900 cursor-pointer"
+            className="bg-slate-50 text-slate-900 text-sm font-semibold border border-slate-200 rounded-xl px-4 py-2.5 outline-none focus:border-sky-900 cursor-pointer"
           >
             <option value="all">All Subjects</option>
             <option value="cs">Computer Science</option>
@@ -73,13 +73,13 @@ export default function DepartmentKPIsTab({ overviewData, setActiveTab, onRefres
         </div>
       </div>
 
-      {/* 4 Primary KPI Metric Cards - Light Blue, White, Black Palette */}
+      {/* 4 Primary KPI Metric Cards - Dark Sky Blue & White */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
         {/* Total Teachers */}
-        <div className="bg-white rounded-2xl p-6 border border-sky-100 shadow-2xs hover:shadow-md hover:border-sky-200 transition-all flex flex-col justify-between">
+        <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-2xs hover:shadow-md hover:border-sky-800 transition-all flex flex-col justify-between">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Teachers</span>
-            <div className="w-10 h-10 rounded-xl bg-sky-50 text-sky-900 border border-sky-200 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-xl bg-sky-900 text-white flex items-center justify-center shadow-xs">
               <Users size={18} />
             </div>
           </div>
@@ -96,10 +96,10 @@ export default function DepartmentKPIsTab({ overviewData, setActiveTab, onRefres
         </div>
 
         {/* Students per Teacher */}
-        <div className="bg-white rounded-2xl p-6 border border-sky-100 shadow-2xs hover:shadow-md hover:border-sky-200 transition-all flex flex-col justify-between">
+        <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-2xs hover:shadow-md hover:border-sky-800 transition-all flex flex-col justify-between">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Students per Teacher</span>
-            <div className="w-10 h-10 rounded-xl bg-sky-50 text-sky-900 border border-sky-200 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-xl bg-sky-900 text-white flex items-center justify-center shadow-xs">
               <GraduationCap size={18} />
             </div>
           </div>
@@ -110,16 +110,16 @@ export default function DepartmentKPIsTab({ overviewData, setActiveTab, onRefres
             </div>
             <div className="mt-4 flex items-center justify-between text-xs text-slate-500 pt-3 border-t border-slate-100 font-medium">
               <span>Standard Goal: Under 30:1</span>
-              <span className="font-bold text-slate-900">Good</span>
+              <span className="font-bold text-sky-950">Good</span>
             </div>
           </div>
         </div>
 
         {/* Teacher Ratings */}
-        <div className="bg-white rounded-2xl p-6 border border-sky-100 shadow-2xs hover:shadow-md hover:border-sky-200 transition-all flex flex-col justify-between">
+        <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-2xs hover:shadow-md hover:border-sky-800 transition-all flex flex-col justify-between">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Student Rating</span>
-            <div className="w-10 h-10 rounded-xl bg-sky-50 text-sky-900 border border-sky-200 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-xl bg-sky-900 text-white flex items-center justify-center shadow-xs">
               <Star size={18} />
             </div>
           </div>
@@ -131,16 +131,16 @@ export default function DepartmentKPIsTab({ overviewData, setActiveTab, onRefres
             </div>
             <div className="mt-4 flex items-center justify-between text-xs text-slate-500 pt-3 border-t border-slate-100 font-medium">
               <span>842 Student Reviews</span>
-              <span className="font-bold text-slate-900">Excellent</span>
+              <span className="font-bold text-sky-950">Excellent</span>
             </div>
           </div>
         </div>
 
         {/* Action Items */}
-        <div className="bg-white rounded-2xl p-6 border border-sky-100 shadow-2xs hover:shadow-md hover:border-sky-200 transition-all flex flex-col justify-between">
+        <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-2xs hover:shadow-md hover:border-sky-800 transition-all flex flex-col justify-between">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Needs Attention</span>
-            <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-900 border border-amber-200 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center shadow-xs">
               <AlertTriangle size={18} />
             </div>
           </div>
@@ -163,17 +163,17 @@ export default function DepartmentKPIsTab({ overviewData, setActiveTab, onRefres
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
         {/* Department Budget & Teaching Hours Card */}
-        <div className="bg-white rounded-2xl p-6 border border-sky-100 shadow-2xs flex flex-col justify-between">
+        <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-2xs flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between pb-4 border-b border-slate-100">
               <div>
                 <h3 className="font-extrabold text-slate-900 text-sm flex items-center gap-2">
-                  <DollarSign size={17} className="text-sky-700" />
+                  <DollarSign size={17} className="text-sky-900" />
                   Budget & Teaching Hours
                 </h3>
                 <p className="text-xs text-slate-400 mt-0.5">Money and class hours used this semester</p>
               </div>
-              <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-sky-50 text-sky-900 border border-sky-200">
+              <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-sky-900 text-white">
                 {budgetPercent}% Used
               </span>
             </div>
@@ -185,9 +185,9 @@ export default function DepartmentKPIsTab({ overviewData, setActiveTab, onRefres
                   <span className="text-slate-600">Budget Spent</span>
                   <span className="text-slate-900 font-black">${budget.spent.toLocaleString()} of ${budget.allocated.toLocaleString()}</span>
                 </div>
-                <div className="w-full h-2 bg-sky-100/70 rounded-full overflow-hidden">
+                <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
                   <div 
-                    className="h-full bg-slate-900 rounded-full transition-all duration-300"
+                    className="h-full bg-sky-900 rounded-full transition-all duration-300"
                     style={{ width: `${Math.min(budgetPercent, 100)}%` }}
                   />
                 </div>
@@ -203,9 +203,9 @@ export default function DepartmentKPIsTab({ overviewData, setActiveTab, onRefres
                   <span className="text-slate-600">Class Hours Taught</span>
                   <span className="text-slate-900 font-black">{budget.hoursLoggedThisMonth} of {budget.hoursAllocatedCap} hrs</span>
                 </div>
-                <div className="w-full h-2 bg-sky-100/70 rounded-full overflow-hidden">
+                <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
                   <div 
-                    className="h-full bg-sky-700 rounded-full transition-all duration-300"
+                    className="h-full bg-sky-800 rounded-full transition-all duration-300"
                     style={{ width: `${Math.min(hoursPercent, 100)}%` }}
                   />
                 </div>
@@ -218,11 +218,11 @@ export default function DepartmentKPIsTab({ overviewData, setActiveTab, onRefres
           </div>
 
           <div className="mt-6 pt-4 border-t border-slate-100 grid grid-cols-2 gap-3 text-center">
-            <div className="p-3 rounded-xl bg-sky-50/50 border border-sky-100">
+            <div className="p-3 rounded-xl bg-slate-50 border border-slate-200">
               <span className="block text-xs text-slate-400 uppercase font-bold">In Training</span>
               <span className="text-base font-extrabold text-slate-900 mt-0.5 block">{kpis?.pendingOnboardingCount || 2} Teachers</span>
             </div>
-            <div className="p-3 rounded-xl bg-sky-50/50 border border-sky-100">
+            <div className="p-3 rounded-xl bg-slate-50 border border-slate-200">
               <span className="block text-xs text-slate-400 uppercase font-bold">Open Hiring Posts</span>
               <span className="text-base font-extrabold text-slate-900 mt-0.5 block">{kpis?.openJobRequisitionsCount || 3} Openings</span>
             </div>
@@ -230,7 +230,7 @@ export default function DepartmentKPIsTab({ overviewData, setActiveTab, onRefres
         </div>
 
         {/* Important Alerts & Decisions */}
-        <div className="lg:col-span-2 bg-white rounded-2xl p-6 border border-sky-100 shadow-2xs flex flex-col justify-between">
+        <div className="lg:col-span-2 bg-white rounded-2xl p-6 border border-slate-200 shadow-2xs flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between pb-4 border-b border-slate-100">
               <div>
@@ -239,7 +239,7 @@ export default function DepartmentKPIsTab({ overviewData, setActiveTab, onRefres
                 </h3>
                 <p className="text-xs text-slate-400 mt-0.5">Things that need your review or approval</p>
               </div>
-              <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-sky-50 text-sky-900 border border-sky-200">
+              <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-sky-900 text-white">
                 {alerts?.length || 0} Alerts
               </span>
             </div>
@@ -248,10 +248,10 @@ export default function DepartmentKPIsTab({ overviewData, setActiveTab, onRefres
               {(alerts || []).map((alert) => (
                 <div 
                   key={alert.id}
-                  className="p-4 rounded-xl bg-sky-50/40 border border-sky-100 flex items-start justify-between gap-4"
+                  className="p-4 rounded-xl bg-slate-50 border border-slate-200 flex items-start justify-between gap-4"
                 >
                   <div className="flex items-start gap-3 min-w-0">
-                    <span className="mt-1.5 w-2 h-2 rounded-full bg-sky-700 shrink-0" />
+                    <span className="mt-1.5 w-2 h-2 rounded-full bg-sky-900 shrink-0" />
                     <div className="min-w-0">
                       <div className="flex items-center gap-2">
                         <h4 className="text-sm font-extrabold text-slate-900 truncate">{alert.title}</h4>
@@ -269,7 +269,7 @@ export default function DepartmentKPIsTab({ overviewData, setActiveTab, onRefres
                   {alert.category === 'workload' && (
                     <button 
                       onClick={() => setActiveTab('workload')}
-                      className="shrink-0 px-3.5 py-1.5 text-xs font-bold bg-white hover:bg-sky-50 border border-sky-200 text-slate-900 rounded-xl transition-all flex items-center gap-1 cursor-pointer shadow-2xs"
+                      className="shrink-0 px-3.5 py-1.5 text-xs font-bold bg-sky-900 hover:bg-sky-800 text-white rounded-xl transition-all flex items-center gap-1 cursor-pointer shadow-2xs"
                     >
                       Balance Load <ChevronRight size={13} />
                     </button>
@@ -277,7 +277,7 @@ export default function DepartmentKPIsTab({ overviewData, setActiveTab, onRefres
                   {alert.category === 'advisory' && (
                     <button 
                       onClick={() => setActiveTab('advisors')}
-                      className="shrink-0 px-3.5 py-1.5 text-xs font-bold bg-white hover:bg-sky-50 border border-sky-200 text-slate-900 rounded-xl transition-all flex items-center gap-1 cursor-pointer shadow-2xs"
+                      className="shrink-0 px-3.5 py-1.5 text-xs font-bold bg-sky-900 hover:bg-sky-800 text-white rounded-xl transition-all flex items-center gap-1 cursor-pointer shadow-2xs"
                     >
                       View Advisors <ChevronRight size={13} />
                     </button>
@@ -285,7 +285,7 @@ export default function DepartmentKPIsTab({ overviewData, setActiveTab, onRefres
                   {alert.category === 'outcomes' && (
                     <button 
                       onClick={() => setActiveTab('outcomes')}
-                      className="shrink-0 px-3.5 py-1.5 text-xs font-bold bg-white hover:bg-sky-50 border border-sky-200 text-slate-900 rounded-xl transition-all flex items-center gap-1 cursor-pointer shadow-2xs"
+                      className="shrink-0 px-3.5 py-1.5 text-xs font-bold bg-sky-900 hover:bg-sky-800 text-white rounded-xl transition-all flex items-center gap-1 cursor-pointer shadow-2xs"
                     >
                       View Grades <ChevronRight size={13} />
                     </button>
@@ -297,10 +297,10 @@ export default function DepartmentKPIsTab({ overviewData, setActiveTab, onRefres
 
           <div className="mt-5 pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400 font-medium">
             <span className="flex items-center gap-1.5">
-              <ShieldCheck size={14} className="text-sky-600" />
+              <ShieldCheck size={14} className="text-sky-900" />
               Live system monitoring active
             </span>
-            <span className="text-slate-900 font-bold cursor-pointer hover:underline flex items-center gap-1" onClick={onRefresh}>
+            <span className="text-sky-900 font-bold cursor-pointer hover:underline flex items-center gap-1" onClick={onRefresh}>
               <RefreshCw size={12} /> Refresh
             </span>
           </div>
@@ -309,9 +309,9 @@ export default function DepartmentKPIsTab({ overviewData, setActiveTab, onRefres
 
       {/* 3-Column Subject Divisions Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-        <div className="p-5 rounded-2xl bg-white border border-sky-100 shadow-2xs flex items-center justify-between">
+        <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-2xs flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center font-black text-xs shadow-xs">
+            <div className="w-10 h-10 rounded-xl bg-sky-900 text-white flex items-center justify-center font-black text-xs shadow-xs">
               CS
             </div>
             <div>
@@ -320,14 +320,14 @@ export default function DepartmentKPIsTab({ overviewData, setActiveTab, onRefres
             </div>
           </div>
           <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-sky-50 text-sky-900 border border-sky-200">
-            <span className="w-2 h-2 rounded-full bg-sky-600" />
+            <span className="w-2 h-2 rounded-full bg-sky-900" />
             Normal
           </span>
         </div>
 
-        <div className="p-5 rounded-2xl bg-white border border-sky-100 shadow-2xs flex items-center justify-between">
+        <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-2xs flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center font-black text-xs shadow-xs">
+            <div className="w-10 h-10 rounded-xl bg-sky-900 text-white flex items-center justify-center font-black text-xs shadow-xs">
               AI
             </div>
             <div>
@@ -336,12 +336,12 @@ export default function DepartmentKPIsTab({ overviewData, setActiveTab, onRefres
             </div>
           </div>
           <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-sky-50 text-sky-900 border border-sky-200">
-            <span className="w-2 h-2 rounded-full bg-sky-600" />
+            <span className="w-2 h-2 rounded-full bg-sky-900" />
             Normal
           </span>
         </div>
 
-        <div className="p-5 rounded-2xl bg-white border border-sky-100 shadow-2xs flex items-center justify-between">
+        <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-2xs flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center font-black text-xs shadow-xs">
               CY
@@ -352,7 +352,7 @@ export default function DepartmentKPIsTab({ overviewData, setActiveTab, onRefres
             </div>
           </div>
           <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-800 border border-slate-200">
-            <span className="w-2 h-2 rounded-full bg-slate-400" />
+            <span className="w-2 h-2 rounded-full bg-slate-500" />
             Hiring
           </span>
         </div>

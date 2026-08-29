@@ -119,7 +119,7 @@ export default function PerformanceOutcomesTab({ outcomesData }) {
       <div className="bg-white p-6 rounded-2xl border border-sky-100 shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-3">
-            <span className="p-2.5 rounded-xl bg-sky-50 text-sky-900 border border-sky-200 font-bold text-sm flex items-center justify-center">
+            <span className="p-2.5 rounded-xl bg-sky-900 text-white font-bold text-sm flex items-center justify-center shadow-xs">
               <GraduationCap size={20} />
             </span>
             <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">
@@ -160,7 +160,7 @@ export default function PerformanceOutcomesTab({ outcomesData }) {
             <span className="text-2xl font-black text-slate-900 mt-1 block">{summary.avgPassRate || 88.4}%</span>
             <span className="text-xs text-sky-900 font-bold mt-0.5 block">Standard Goal &gt; 85%</span>
           </div>
-          <div className="w-10 h-10 rounded-xl bg-sky-50 text-sky-900 border border-sky-200 flex items-center justify-center">
+          <div className="w-10 h-10 rounded-xl bg-sky-900 text-white flex items-center justify-center shadow-xs">
             <Percent size={18} />
           </div>
         </div>
@@ -171,7 +171,7 @@ export default function PerformanceOutcomesTab({ outcomesData }) {
             <span className="text-2xl font-black text-slate-900 mt-1 block">{summary.avgGPA || 3.38} / 4.0</span>
             <span className="text-xs text-slate-500 font-medium mt-0.5 block">Consistent with prior term</span>
           </div>
-          <div className="w-10 h-10 rounded-xl bg-sky-50 text-sky-900 border border-sky-200 flex items-center justify-center">
+          <div className="w-10 h-10 rounded-xl bg-sky-900 text-white flex items-center justify-center shadow-xs">
             <TrendingUp size={18} />
           </div>
         </div>
@@ -193,7 +193,7 @@ export default function PerformanceOutcomesTab({ outcomesData }) {
             <span className="text-2xl font-black text-slate-900 mt-1 block">1 Assigned</span>
             <span className="text-xs text-sky-900 font-bold mt-0.5 block">Tutoring In Progress</span>
           </div>
-          <div className="w-10 h-10 rounded-xl bg-sky-50 text-sky-900 border border-sky-200 flex items-center justify-center">
+          <div className="w-10 h-10 rounded-xl bg-sky-900 text-white flex items-center justify-center shadow-xs">
             <ShieldAlert size={18} />
           </div>
         </div>

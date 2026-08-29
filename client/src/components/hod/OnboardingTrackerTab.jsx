@@ -82,7 +82,7 @@ export default function OnboardingTrackerTab({ onboardingData, onRefresh }) {
       <div className="bg-white p-6 rounded-2xl border border-sky-100 shadow-2xs flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-3">
-            <span className="p-2.5 rounded-xl bg-sky-50 text-sky-900 border border-sky-200 font-bold text-sm flex items-center justify-center">
+            <span className="p-2.5 rounded-xl bg-sky-900 text-white font-bold text-sm flex items-center justify-center shadow-xs">
               <ClipboardCheck size={20} />
             </span>
             <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">Faculty Onboarding & Readiness</h1>

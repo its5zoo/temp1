@@ -164,7 +164,7 @@ export default function RecruitmentPipelineTab({ recruitmentData, onRefresh }) {
       <div className="bg-white p-6 rounded-2xl border border-sky-100 shadow-2xs flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-3">
-            <span className="p-2.5 rounded-xl bg-sky-50 text-sky-900 border border-sky-200 font-bold text-sm flex items-center justify-center">
+            <span className="p-2.5 rounded-xl bg-sky-900 text-white font-bold text-sm flex items-center justify-center shadow-xs">
               <UserPlus size={20} />
             </span>
             <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">
@@ -205,7 +205,7 @@ export default function RecruitmentPipelineTab({ recruitmentData, onRefresh }) {
             <span className="text-2xl font-black text-slate-900 mt-1 block">{totalOpenings} Positions</span>
             <span className="text-xs text-slate-500 mt-0.5 block">{requisitions.length} Requisitions</span>
           </div>
-          <div className="w-10 h-10 rounded-xl bg-sky-50 text-sky-900 border border-sky-200 flex items-center justify-center">
+          <div className="w-10 h-10 rounded-xl bg-sky-900 text-white flex items-center justify-center shadow-xs">
             <Briefcase size={18} />
           </div>
         </div>
@@ -216,7 +216,7 @@ export default function RecruitmentPipelineTab({ recruitmentData, onRefresh }) {
             <span className="text-2xl font-black text-slate-900 mt-1 block">{applicants.length} Applicants</span>
             <span className="text-xs text-slate-500 mt-0.5 block">Vetted by Committee</span>
           </div>
-          <div className="w-10 h-10 rounded-xl bg-sky-50 text-sky-900 border border-sky-200 flex items-center justify-center">
+          <div className="w-10 h-10 rounded-xl bg-sky-900 text-white flex items-center justify-center shadow-xs">
             <Users size={18} />
           </div>
         </div>
@@ -227,7 +227,7 @@ export default function RecruitmentPipelineTab({ recruitmentData, onRefresh }) {
             <span className="text-2xl font-black text-slate-900 mt-1 block">{inInterviewCount + selectedCount} Faculty</span>
             <span className="text-xs text-slate-500 mt-0.5 block">{inInterviewCount} Interview • {selectedCount} Selected</span>
           </div>
-          <div className="w-10 h-10 rounded-xl bg-sky-50 text-sky-900 border border-sky-200 flex items-center justify-center">
+          <div className="w-10 h-10 rounded-xl bg-sky-900 text-white flex items-center justify-center shadow-xs">
             <GraduationCap size={18} />
           </div>
         </div>
@@ -238,7 +238,7 @@ export default function RecruitmentPipelineTab({ recruitmentData, onRefresh }) {
             <span className="text-2xl font-black text-slate-900 mt-1 block">14 Days</span>
             <span className="text-xs text-emerald-700 font-semibold mt-0.5 block">On Target (Term Fall 2026)</span>
           </div>
-          <div className="w-10 h-10 rounded-xl bg-sky-50 text-sky-900 border border-sky-200 flex items-center justify-center">
+          <div className="w-10 h-10 rounded-xl bg-sky-900 text-white flex items-center justify-center shadow-xs">
             <Clock size={18} />
           </div>
         </div>
