@@ -99,7 +99,7 @@ export default function Login() {
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col justify-between p-4 sm:p-6 font-sans">
       {/* Top Header */}
-      <div className="max-w-md mx-auto w-full flex items-center justify-between">
+      <div className="max-w-md mx-auto w-full flex items-center justify-start">
         <button 
           onClick={() => navigate('/')}
           className="text-xs font-bold text-slate-600 hover:text-slate-900 flex items-center gap-1.5 transition-colors cursor-pointer py-1 px-2 -ml-2 rounded-lg hover:bg-slate-200/60"
@@ -107,10 +107,6 @@ export default function Login() {
           <ArrowLeft size={15} />
           <span>Back to Home</span>
         </button>
-
-        <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">
-          AcadCore v2.4
-        </span>
       </div>
 
       {/* Center Unified Single Box */}
