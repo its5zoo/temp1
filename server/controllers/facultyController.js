@@ -374,16 +374,22 @@ exports.updateStudentMarks = (req, res) => {
   const { studentId, internalMarks, midtermMarks } = req.body;
   facultyStudents = facultyStudents.map(s => {
     if (s.id === studentId) {
+      const sanitizedInternal = internalMarks !== undefined 
+        ? Math.max(0, Math.min(30, Number(internalMarks) || 0)) 
+        : s.internalMarks;
+      const sanitizedMidterm = midtermMarks !== undefined 
+        ? Math.max(0, Math.min(30, Number(midtermMarks) || 0)) 
+        : s.midtermMarks;
       return {
         ...s,
-        internalMarks: internalMarks !== undefined ? Number(internalMarks) : s.internalMarks,
-        midtermMarks: midtermMarks !== undefined ? Number(midtermMarks) : s.midtermMarks
+        internalMarks: sanitizedInternal,
+        midtermMarks: sanitizedMidterm
       };
     }
     return s;
   });
 
-  res.json({ success: true, message: 'Marks updated successfully.' });
+  res.json({ success: true, message: 'Marks validated and updated successfully within [0, 30].' });
 };
 
 exports.getFacultyNotices = (req, res) => {

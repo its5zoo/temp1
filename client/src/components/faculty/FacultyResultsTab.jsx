@@ -6,6 +6,7 @@ import {
   CheckCircle2, 
   BarChart2, 
   Award, 
+  AlertCircle,
   Check 
 } from 'lucide-react';
 import { 
@@ -27,36 +28,63 @@ export default function FacultyResultsTab({ resultsData, onUpdateMarks }) {
   const [saving, setSaving] = useState(false);
   const [toastMsg, setToastMsg] = useState(null);
 
-  const handleScoreChange = (id, field, value) => {
-    setLocalStudents(prev => prev.map(s => s.id === id ? { ...s, [field]: value } : s));
+  // Strict Validation Constraints: Max 30M each, no negative values, Total max 60M
+  const handleScoreChange = (id, field, rawValue) => {
+    if (rawValue === '') {
+      setLocalStudents(prev => prev.map(s => s.id === id ? { ...s, [field]: '' } : s));
+      return;
+    }
+
+    let num = Number(rawValue);
+    if (isNaN(num)) return;
+
+    // Constraint 1: Negative marks not allowed
+    if (num < 0) {
+      num = 0;
+      setToastMsg('⚠️ Negative marks are not allowed. Clamped to 0.');
+      setTimeout(() => setToastMsg(null), 3000);
+    }
+
+    // Constraint 2: Max 30 Marks per assessment component
+    if (num > 30) {
+      num = 30;
+      setToastMsg(`⚠️ Maximum marks allowed for ${field === 'internalMarks' ? 'Internal' : 'Midterm'} is 30M (Total max 60M).`);
+      setTimeout(() => setToastMsg(null), 3500);
+    }
+
+    setLocalStudents(prev => prev.map(s => s.id === id ? { ...s, [field]: num } : s));
   };
 
   const handleSaveMarks = async () => {
     if (!onUpdateMarks) return;
     setSaving(true);
     for (const s of localStudents) {
+      const validInternal = Math.max(0, Math.min(30, Number(s.internalMarks || 0)));
+      const validMidterm = Math.max(0, Math.min(30, Number(s.midtermMarks || 0)));
       await onUpdateMarks({
         studentId: s.id,
-        internalMarks: s.internalMarks,
-        midtermMarks: s.midtermMarks
+        internalMarks: validInternal,
+        midtermMarks: validMidterm
       });
     }
     setSaving(false);
-    setToastMsg('All student marks updated and locked into gradebook.');
+    setToastMsg('All student marks verified [0-30M each] and saved to gradebook.');
     setTimeout(() => setToastMsg(null), 3500);
   };
 
   const handleExportCSV = () => {
     const headers = ["Roll No", "Student Name", "Course", "Internal (30M)", "Midterm (30M)", "Total (60M)", "Grade Estimate"];
     const rows = localStudents.map(s => {
-      const total = Number(s.internalMarks || 0) + Number(s.midtermMarks || 0);
+      const internal = Math.max(0, Math.min(30, Number(s.internalMarks || 0)));
+      const midterm = Math.max(0, Math.min(30, Number(s.midtermMarks || 0)));
+      const total = internal + midterm;
       const grade = total >= 50 ? 'A' : total >= 40 ? 'B' : total >= 30 ? 'C' : 'F';
       return [
         s.rollNo,
         `"${s.name}"`,
         s.courseCode,
-        s.internalMarks,
-        s.midtermMarks,
+        internal,
+        midterm,
         total,
         grade
       ];
@@ -99,10 +127,10 @@ export default function FacultyResultsTab({ resultsData, onUpdateMarks }) {
 
   return (
     <div className="space-y-6">
-      {/* Toast */}
+      {/* Toast Notification */}
       {toastMsg && (
-        <div className="fixed bottom-6 right-6 z-50 p-4 rounded-xl shadow-lg bg-slate-900 border border-slate-700 text-white flex items-center gap-3 text-sm font-semibold animate-fade-in">
-          <CheckCircle2 className="text-emerald-400" size={18} />
+        <div className="fixed bottom-6 right-6 z-50 p-4 rounded-xl shadow-xl bg-slate-900 border border-slate-700 text-white flex items-center gap-3 text-sm font-semibold animate-fade-in">
+          <AlertCircle className="text-amber-400" size={18} />
           <span>{toastMsg}</span>
         </div>
       )}
@@ -119,7 +147,7 @@ export default function FacultyResultsTab({ resultsData, onUpdateMarks }) {
                 Exam Evaluation & Gradebook Entry
               </h2>
               <p className="text-xs text-slate-500 mt-0.5">
-                Input internal assessment scores, review grade bell curves & submit marks to Registrar
+                Input scores with strict bounds [Internal: 0-30M • Midterm: 0-30M • Total: 0-60M]
               </p>
             </div>
           </div>
@@ -230,15 +258,17 @@ export default function FacultyResultsTab({ resultsData, onUpdateMarks }) {
               <tr className="bg-slate-50 border-b border-slate-200 text-slate-600 font-bold uppercase tracking-wider">
                 <th className="py-3.5 px-4">Student & Roll No</th>
                 <th className="py-3.5 px-4">Course</th>
-                <th className="py-3.5 px-4">Internal Marks (30M)</th>
-                <th className="py-3.5 px-4">Midterm Exam (30M)</th>
-                <th className="py-3.5 px-4">Total (60M)</th>
+                <th className="py-3.5 px-4">Internal Marks (Max 30M)</th>
+                <th className="py-3.5 px-4">Midterm Exam (Max 30M)</th>
+                <th className="py-3.5 px-4">Total (Max 60M)</th>
                 <th className="py-3.5 px-4">Projected Grade</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
               {localStudents.map((s) => {
-                const total = Number(s.internalMarks || 0) + Number(s.midtermMarks || 0);
+                const internal = Math.max(0, Math.min(30, Number(s.internalMarks || 0)));
+                const midterm = Math.max(0, Math.min(30, Number(s.midtermMarks || 0)));
+                const total = internal + midterm;
                 const grade = total >= 50 ? 'A' : total >= 40 ? 'B' : total >= 30 ? 'C' : 'F';
                 return (
                   <tr key={s.id} className="hover:bg-slate-50/70 transition-colors">
@@ -252,25 +282,33 @@ export default function FacultyResultsTab({ resultsData, onUpdateMarks }) {
                     </td>
 
                     <td className="py-3.5 px-4">
-                      <input
-                        type="number"
-                        min="0"
-                        max="30"
-                        value={s.internalMarks}
-                        onChange={(e) => handleScoreChange(s.id, 'internalMarks', e.target.value)}
-                        className="w-16 p-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs font-black text-slate-900 outline-none focus:border-slate-900"
-                      />
+                      <div className="flex items-center gap-1.5">
+                        <input
+                          type="number"
+                          min="0"
+                          max="30"
+                          value={s.internalMarks}
+                          onKeyDown={(e) => { if (e.key === '-' || e.key === '+' || e.key === 'e') e.preventDefault(); }}
+                          onChange={(e) => handleScoreChange(s.id, 'internalMarks', e.target.value)}
+                          className="w-16 p-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs font-black text-slate-900 outline-none focus:border-slate-900 focus:bg-white"
+                        />
+                        <span className="text-[11px] text-slate-400 font-medium">/ 30</span>
+                      </div>
                     </td>
 
                     <td className="py-3.5 px-4">
-                      <input
-                        type="number"
-                        min="0"
-                        max="30"
-                        value={s.midtermMarks}
-                        onChange={(e) => handleScoreChange(s.id, 'midtermMarks', e.target.value)}
-                        className="w-16 p-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs font-black text-slate-900 outline-none focus:border-slate-900"
-                      />
+                      <div className="flex items-center gap-1.5">
+                        <input
+                          type="number"
+                          min="0"
+                          max="30"
+                          value={s.midtermMarks}
+                          onKeyDown={(e) => { if (e.key === '-' || e.key === '+' || e.key === 'e') e.preventDefault(); }}
+                          onChange={(e) => handleScoreChange(s.id, 'midtermMarks', e.target.value)}
+                          className="w-16 p-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs font-black text-slate-900 outline-none focus:border-slate-900 focus:bg-white"
+                        />
+                        <span className="text-[11px] text-slate-400 font-medium">/ 30</span>
+                      </div>
                     </td>
 
                     <td className="py-3.5 px-4 font-black text-sm text-slate-900">
