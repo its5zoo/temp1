@@ -130,7 +130,7 @@ export default function AdvisorDashboard({ initialTab = 'dashboard' }) {
   return (
     <div className="dashboard-content max-w-7xl mx-auto space-y-6 pb-12">
       {/* Top Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-sky-100 shadow-2xs">
+      <div className="print-hide flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-sky-100 shadow-2xs">
         <div>
           <div className="flex items-center gap-2">
             <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">
