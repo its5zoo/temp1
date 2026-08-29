@@ -24,8 +24,8 @@
 }
 
 .logo-icon-wrapper {
-  width: 30px;
-  height: 30px;
+  width: 32px;
+  height: 32px;
   border-radius: 8px;
   background: #f1f5f9;
   border: 1px solid #e2e8f0;
@@ -35,7 +35,7 @@
 }
 
 .logo-text {
-  font-size: 17px;
+  font-size: 18px;
   font-weight: 700;
   color: #0f172a;
   letter-spacing: -0.02em;
@@ -57,7 +57,7 @@
 }
 
 .section-header {
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 600;
   color: #94a3b8;
   text-transform: uppercase;
@@ -80,10 +80,10 @@
   border: 1px solid transparent;
   color: #475569;
   text-align: left;
-  padding: 7px 9px;
+  padding: 8px 10px;
   border-radius: 8px;
   cursor: pointer;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 500;
   transition: all 0.1s ease;
 }
@@ -108,7 +108,7 @@
 }
 
 .sidebar-badge {
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 600;
   padding: 1px 6px;
   border-radius: 9999px;
@@ -130,8 +130,8 @@
 }
 
 .user-avatar {
-  width: 30px;
-  height: 30px;
+  width: 32px;
+  height: 32px;
   border-radius: 6px;
   background: #0f172a;
   color: #ffffff;
@@ -139,7 +139,7 @@
   align-items: center;
   justify-content: center;
   font-weight: 600;
-  font-size: 13px;
+  font-size: 14px;
   flex-shrink: 0;
 }
 
@@ -150,7 +150,7 @@
 
 .user-name {
   color: #0f172a;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
   white-space: nowrap;
   overflow: hidden;
@@ -159,7 +159,7 @@
 
 .user-role {
   color: #64748b;
-  font-size: 10px;
+  font-size: 11px;
   text-transform: capitalize;
 }
 
@@ -167,7 +167,7 @@
   background: none;
   border: none;
   color: #94a3b8;
-  padding: 4px;
+  padding: 5px;
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.1s ease;

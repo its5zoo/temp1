@@ -2,13 +2,9 @@ import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import CourseCard from '../components/courses/CourseCard';
 import { 
-  BookOpen, 
   Search, 
-  Users, 
   X,
-  MapPin,
-  Clock,
-  GraduationCap
+  BookOpen
 } from 'lucide-react';
 
 const INITIAL_COURSES = [
@@ -51,7 +47,7 @@ const INITIAL_COURSES = [
   {
     id: 'CS301',
     code: 'CS301',
-    title: 'Advanced Python & Architecture',
+    title: 'Advanced Python & Software Architecture',
     department: 'Computer Science',
     credits: 4,
     instructor: 'Prof. Jane Doe',
@@ -69,7 +65,7 @@ const INITIAL_COURSES = [
   {
     id: 'CS402',
     code: 'CS402',
-    title: 'Machine Learning & Neural Nets',
+    title: 'Machine Learning & Neural Networks',
     department: 'AI & Data Science',
     credits: 4,
     instructor: 'Prof. Jane Doe',
@@ -82,7 +78,7 @@ const INITIAL_COURSES = [
     schedule: 'Tue, Thu 03:00 - 04:30 PM',
     room: 'AI Studio 1',
     level: 'Advanced',
-    image: 'https://images.unsplash.com/photo-1677442136019-21780efad99a?w=600&auto=format&fit=crop&q=80'
+    image: 'https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=600&auto=format&fit=crop&q=80'
   },
   {
     id: 'DS301',
@@ -140,39 +136,43 @@ export default function Courses() {
   const totalEnrollment = courses.reduce((sum, c) => sum + c.enrolled, 0);
 
   return (
-    <div className="max-w-7xl mx-auto space-y-5 pb-12">
+    <div className="max-w-7xl mx-auto space-y-6 pb-12">
       {/* Header Banner */}
-      <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-base font-bold text-slate-900">Courses & Catalog</h1>
-          <p className="text-xs text-slate-500">Department curriculum and enrollment overview.</p>
+          <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">
+            Courses & Catalog
+          </h1>
+          <p className="text-sm text-slate-500 mt-1">
+            Department curriculum and enrollment overview across active academic terms.
+          </p>
         </div>
 
         <div className="flex items-center gap-2">
-          <span className="text-xs text-slate-500">
+          <div className="px-4 py-2 rounded-xl bg-slate-50 border border-slate-200 text-sm font-semibold text-slate-800">
             <strong>{courses.length}</strong> Courses • <strong>{totalEnrollment}</strong> Enrolled
-          </span>
+          </div>
         </div>
       </div>
 
       {/* Toolbar */}
-      <div className="bg-white p-3 rounded-xl border border-slate-200 shadow-2xs flex flex-col sm:flex-row items-center justify-between gap-3">
-        <div className="relative w-full sm:w-72">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={14} />
+      <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-2xs flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="relative w-full sm:w-80">
+          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
           <input
             type="text"
-            placeholder="Search courses..."
+            placeholder="Search courses by code, title, instructor..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-8 pr-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs outline-none focus:border-slate-800 focus:bg-white"
+            className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-slate-800 focus:bg-white transition-all"
           />
         </div>
 
-        <div className="flex items-center gap-2 w-full sm:w-auto">
+        <div className="flex items-center gap-3 w-full sm:w-auto">
           <select
             value={deptFilter}
             onChange={(e) => setDeptFilter(e.target.value)}
-            className="bg-slate-50 text-slate-900 text-xs font-medium border border-slate-200 rounded-lg px-2.5 py-1.5 outline-none focus:border-slate-800"
+            className="bg-slate-50 text-slate-900 text-sm font-medium border border-slate-200 rounded-xl px-3.5 py-2.5 outline-none focus:border-slate-800"
           >
             <option value="all">All Departments</option>
             <option value="Computer Science">Computer Science</option>
@@ -180,14 +180,14 @@ export default function Courses() {
             <option value="Cybersecurity">Cybersecurity</option>
           </select>
 
-          <span className="text-xs text-slate-500 ml-1">
+          <span className="text-sm text-slate-500 ml-1 whitespace-nowrap">
             {filteredCourses.length} results
           </span>
         </div>
       </div>
 
-      {/* Course Cards Grid - Simple Picture Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      {/* Course Cards Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredCourses.map((c) => (
           <CourseCard
             key={c.id}
@@ -200,61 +200,61 @@ export default function Courses() {
       {/* Course Detail Modal */}
       {selectedCourse && (
         <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-2xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-xl max-w-md w-full p-5 shadow-xl border border-slate-200 animate-in fade-in zoom-in-95 overflow-hidden">
+          <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl border border-slate-200 animate-in fade-in zoom-in-95 overflow-hidden">
             {/* Header Image */}
-            <div className="h-32 -mx-5 -mt-5 mb-4 relative bg-slate-100 overflow-hidden">
+            <div className="h-40 -mx-6 -mt-6 mb-5 relative bg-slate-100 overflow-hidden">
               <img 
                 src={selectedCourse.image} 
                 alt={selectedCourse.title} 
                 className="w-full h-full object-cover"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 to-transparent" />
-              <div className="absolute bottom-3 left-4 right-4 text-white">
-                <span className="text-[10px] font-bold uppercase tracking-wider bg-white/20 backdrop-blur-xs px-2 py-0.5 rounded">
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent" />
+              <div className="absolute bottom-4 left-5 right-5 text-white">
+                <span className="text-xs font-bold uppercase tracking-wider bg-white/20 backdrop-blur-xs px-2.5 py-0.5 rounded-md">
                   {selectedCourse.code} • {selectedCourse.credits} Credits
                 </span>
-                <h3 className="font-bold text-sm mt-1 leading-snug">{selectedCourse.title}</h3>
+                <h3 className="font-bold text-lg mt-1.5 leading-snug">{selectedCourse.title}</h3>
               </div>
               <button
                 onClick={() => setSelectedCourse(null)}
-                className="absolute top-3 right-3 w-6 h-6 rounded-full bg-black/40 text-white flex items-center justify-center hover:bg-black/60 transition-colors"
+                className="absolute top-4 right-4 w-8 h-8 rounded-full bg-black/50 text-white flex items-center justify-center hover:bg-black/75 transition-colors"
               >
-                <X size={13} />
+                <X size={16} />
               </button>
             </div>
 
-            <div className="space-y-3 text-xs">
-              <div className="grid grid-cols-2 gap-2.5">
-                <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-200">
-                  <span className="text-slate-400 block text-[10px] uppercase font-semibold">Instructor</span>
-                  <span className="font-semibold text-slate-900">{selectedCourse.instructor}</span>
+            <div className="space-y-4 text-sm">
+              <div className="grid grid-cols-2 gap-3">
+                <div className="p-3 rounded-xl bg-slate-50 border border-slate-200">
+                  <span className="text-slate-400 block text-xs uppercase font-semibold">Lead Instructor</span>
+                  <span className="font-bold text-slate-900 mt-0.5 block">{selectedCourse.instructor}</span>
                 </div>
-                <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-200">
-                  <span className="text-slate-400 block text-[10px] uppercase font-semibold">Department</span>
-                  <span className="font-semibold text-slate-900">{selectedCourse.department}</span>
+                <div className="p-3 rounded-xl bg-slate-50 border border-slate-200">
+                  <span className="text-slate-400 block text-xs uppercase font-semibold">Department</span>
+                  <span className="font-bold text-slate-900 mt-0.5 block">{selectedCourse.department}</span>
                 </div>
-                <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-200">
-                  <span className="text-slate-400 block text-[10px] uppercase font-semibold">Schedule</span>
-                  <span className="font-semibold text-slate-900">{selectedCourse.schedule}</span>
+                <div className="p-3 rounded-xl bg-slate-50 border border-slate-200">
+                  <span className="text-slate-400 block text-xs uppercase font-semibold">Schedule</span>
+                  <span className="font-bold text-slate-900 mt-0.5 block">{selectedCourse.schedule}</span>
                 </div>
-                <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-200">
-                  <span className="text-slate-400 block text-[10px] uppercase font-semibold">Room & Level</span>
-                  <span className="font-semibold text-slate-900">{selectedCourse.room} ({selectedCourse.level})</span>
+                <div className="p-3 rounded-xl bg-slate-50 border border-slate-200">
+                  <span className="text-slate-400 block text-xs uppercase font-semibold">Room & Level</span>
+                  <span className="font-bold text-slate-900 mt-0.5 block">{selectedCourse.room} ({selectedCourse.level})</span>
                 </div>
               </div>
 
-              <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-200">
-                <span className="font-semibold text-slate-700 uppercase text-[10px] block mb-1">Description</span>
-                <p className="text-slate-600 text-[11px] leading-relaxed">
+              <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+                <span className="font-bold text-slate-900 uppercase text-xs block mb-1">Description</span>
+                <p className="text-slate-600 text-xs leading-relaxed">
                   Core departmental course covering theory, practical lab sessions, and hands-on project implementations.
                 </p>
               </div>
             </div>
 
-            <div className="flex justify-end pt-3 mt-3 border-t border-slate-100">
+            <div className="flex justify-end pt-4 mt-4 border-t border-slate-100">
               <button
                 onClick={() => setSelectedCourse(null)}
-                className="px-3.5 py-1.5 text-xs font-medium bg-slate-900 hover:bg-slate-800 text-white rounded-lg"
+                className="px-5 py-2 text-sm font-semibold bg-slate-900 hover:bg-slate-800 text-white rounded-xl shadow-xs"
               >
                 Close
               </button>
