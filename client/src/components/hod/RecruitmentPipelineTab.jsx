@@ -15,7 +15,9 @@ import {
   Sparkles,
   ChevronRight,
   ArrowLeft,
-  Building
+  LayoutList,
+  Kanban,
+  ExternalLink
 } from 'lucide-react';
 import { updateApplicantStatus, createJobRequisition } from '../../services/api';
 
@@ -23,8 +25,10 @@ const STAGES = ['Applied', 'Screening', 'Interview', 'Selected', 'Onboarding'];
 
 export default function RecruitmentPipelineTab({ recruitmentData, onRefresh }) {
   const { requisitions = [], applicants = [] } = recruitmentData || {};
+  const [viewMode, setViewMode] = useState('table'); // 'table' or 'kanban'
   const [search, setSearch] = useState('');
   const [selectedReq, setSelectedReq] = useState('all');
+  const [selectedStageFilter, setSelectedStageFilter] = useState('all');
   const [candidateModal, setCandidateModal] = useState(null);
   const [newReqModalOpen, setNewReqModalOpen] = useState(false);
   const [toast, setToast] = useState(null);
@@ -103,11 +107,12 @@ export default function RecruitmentPipelineTab({ recruitmentData, onRefresh }) {
                           app.email.toLowerCase().includes(search.toLowerCase()) ||
                           app.degree?.toLowerCase().includes(search.toLowerCase());
     const matchesReq = selectedReq === 'all' || app.jobId === selectedReq;
-    return matchesSearch && matchesReq;
+    const matchesStage = selectedStageFilter === 'all' || app.status === selectedStageFilter;
+    return matchesSearch && matchesReq && matchesStage;
   });
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 w-full max-w-full">
       {/* Toast Notification */}
       {toast && (
         <div className="fixed bottom-6 right-6 z-50 p-4 rounded-xl shadow-lg bg-slate-900 border border-slate-700 text-white flex items-center gap-3 animate-in slide-in-from-bottom-5 text-sm">
@@ -130,7 +135,7 @@ export default function RecruitmentPipelineTab({ recruitmentData, onRefresh }) {
               <h2 className="text-2xl font-extrabold text-slate-900 tracking-tight">Faculty Recruitment ATS Pipeline</h2>
             </div>
             <p className="text-sm text-slate-500 mt-1">
-              Applicant tracking with qualification scoring, candidate dossiers, and automated status triggers.
+              Candidate tracking with qualification scoring, candidate dossiers, and direct stage management.
             </p>
           </div>
 
@@ -144,7 +149,7 @@ export default function RecruitmentPipelineTab({ recruitmentData, onRefresh }) {
         </div>
 
         {/* Requisitions List */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-1">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pt-1">
           {requisitions.map((req) => (
             <div
               key={req.id}
@@ -175,128 +180,256 @@ export default function RecruitmentPipelineTab({ recruitmentData, onRefresh }) {
         </div>
       </div>
 
-      {/* Toolbar */}
-      <div className="flex flex-col sm:flex-row justify-between items-center gap-4 bg-white p-4 rounded-2xl border border-slate-200 shadow-2xs">
-        <div className="relative w-full sm:w-80">
-          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
-          <input
-            type="text"
-            placeholder="Search candidates, credentials, skills..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-slate-900 focus:bg-white transition-all"
-          />
+      {/* Toolbar with Table/Kanban Switcher */}
+      <div className="flex flex-col md:flex-row justify-between items-center gap-4 bg-white p-4 rounded-2xl border border-slate-200 shadow-2xs">
+        <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
+          {/* Search Box */}
+          <div className="relative w-full sm:w-72">
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
+            <input
+              type="text"
+              placeholder="Search candidates..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-slate-900 focus:bg-white transition-all"
+            />
+          </div>
+
+          {/* Stage Filter */}
+          <select
+            value={selectedStageFilter}
+            onChange={(e) => setSelectedStageFilter(e.target.value)}
+            className="bg-slate-50 text-slate-900 text-sm font-semibold border border-slate-200 rounded-xl px-3 py-2 outline-none focus:border-slate-900"
+          >
+            <option value="all">All Stages</option>
+            {STAGES.map(s => <option key={s} value={s}>{s}</option>)}
+          </select>
         </div>
 
-        <div className="flex items-center gap-3 text-sm text-slate-500">
-          <span>Filter: <strong className="text-slate-800">{selectedReq === 'all' ? 'All Requisitions' : selectedReq}</strong></span>
-          {selectedReq !== 'all' && (
-            <button 
-              onClick={() => setSelectedReq('all')}
-              className="text-slate-900 font-bold hover:underline cursor-pointer"
+        {/* View Mode Toggle & Stats */}
+        <div className="flex items-center gap-3 w-full md:w-auto justify-between md:justify-end">
+          <div className="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200">
+            <button
+              onClick={() => setViewMode('table')}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                viewMode === 'table' ? 'bg-white text-slate-900 shadow-2xs' : 'text-slate-600 hover:text-slate-900'
+              }`}
             >
-              Clear Filter
+              <LayoutList size={15} />
+              Table View
             </button>
-          )}
-          <span className="font-bold text-slate-900 bg-slate-100 px-3 py-1 rounded-lg border border-slate-200">
+            <button
+              onClick={() => setViewMode('kanban')}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                viewMode === 'kanban' ? 'bg-white text-slate-900 shadow-2xs' : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              <Kanban size={15} />
+              Kanban Board
+            </button>
+          </div>
+
+          <span className="font-bold text-slate-900 bg-slate-100 px-3 py-1.5 rounded-xl border border-slate-200 text-xs">
             {filteredApplicants.length} Candidates
           </span>
         </div>
       </div>
 
-      {/* Kanban ATS Grid - Spacious & Clean Modern */}
-      <div className="overflow-x-auto pb-6">
-        <div className="flex gap-5 min-w-[1200px] items-start">
-          {STAGES.map((stage) => {
-            const stageCandidates = filteredApplicants.filter(a => a.status === stage);
+      {/* TABLE VIEW (Default - No Screen Overflow) */}
+      {viewMode === 'table' && (
+        <div className="bg-white rounded-2xl border border-slate-200 shadow-2xs overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="bg-slate-50/80 border-b border-slate-200 text-xs font-bold text-slate-500 uppercase tracking-wider">
+                  <th className="py-4 px-5">Candidate</th>
+                  <th className="py-4 px-5">Degree & University</th>
+                  <th className="py-4 px-5">Req / Rate</th>
+                  <th className="py-4 px-5">Match Score</th>
+                  <th className="py-4 px-5">Pipeline Stage</th>
+                  <th className="py-4 px-5 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100 text-sm">
+                {filteredApplicants.map((cand) => (
+                  <tr 
+                    key={cand.id}
+                    className="hover:bg-slate-50/60 transition-colors"
+                  >
+                    {/* Candidate */}
+                    <td className="py-4 px-5">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-xl bg-slate-900 text-white font-extrabold text-sm flex items-center justify-center shadow-xs shrink-0">
+                          {cand.name.split(' ').map(n => n[0]).join('')}
+                        </div>
+                        <div>
+                          <h4 
+                            onClick={() => setCandidateModal(cand)}
+                            className="font-bold text-slate-900 hover:underline cursor-pointer"
+                          >
+                            {cand.name}
+                          </h4>
+                          <span className="text-xs text-slate-400 font-medium">{cand.email}</span>
+                        </div>
+                      </div>
+                    </td>
 
-            return (
-              <div
-                key={stage}
-                onDragOver={handleDragOver}
-                onDrop={(e) => handleDrop(e, stage)}
-                className="flex-1 bg-slate-50/60 rounded-2xl border border-slate-200 flex flex-col min-w-[240px]"
-              >
-                {/* Clean Column Header */}
-                <div className="p-4 rounded-t-2xl border-b border-slate-200 bg-white flex items-center justify-between">
-                  <div className="flex items-center gap-2.5">
-                    <span className="font-extrabold text-xs uppercase tracking-wider text-slate-900">{stage}</span>
-                    <span className="w-6 h-6 rounded-full bg-slate-900 text-white text-xs font-bold flex items-center justify-center shadow-2xs">
-                      {stageCandidates.length}
-                    </span>
+                    {/* Degree */}
+                    <td className="py-4 px-5 font-medium text-slate-700">
+                      <span className="line-clamp-1">{cand.degree}</span>
+                      <span className="text-xs text-slate-400 font-normal">{cand.experienceYears} Years Exp</span>
+                    </td>
+
+                    {/* Requisition & Rate */}
+                    <td className="py-4 px-5">
+                      <span className="font-mono text-xs font-bold text-slate-800 bg-slate-100 px-2 py-0.5 rounded border border-slate-200">
+                        {cand.jobId}
+                      </span>
+                      <p className="text-xs text-slate-900 font-bold mt-1">{cand.expectedHourlyRate}/hr</p>
+                    </td>
+
+                    {/* Match Score */}
+                    <td className="py-4 px-5">
+                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                        {cand.matchScore}% Match
+                      </span>
+                    </td>
+
+                    {/* Stage Selector */}
+                    <td className="py-4 px-5">
+                      <select
+                        value={cand.status}
+                        onChange={(e) => handleStageChange(cand, e.target.value)}
+                        className="bg-slate-50 text-slate-900 text-xs font-bold border border-slate-200 rounded-lg px-2.5 py-1.5 outline-none focus:border-slate-900 cursor-pointer"
+                      >
+                        {STAGES.map(s => (
+                          <option key={s} value={s}>{s}</option>
+                        ))}
+                      </select>
+                    </td>
+
+                    {/* Actions */}
+                    <td className="py-4 px-5 text-right">
+                      <button
+                        onClick={() => setCandidateModal(cand)}
+                        className="px-3.5 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs shadow-2xs transition-all cursor-pointer inline-flex items-center gap-1"
+                      >
+                        <span>Dossier</span>
+                        <ChevronRight size={14} />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+
+                {filteredApplicants.length === 0 && (
+                  <tr>
+                    <td colSpan={6} className="py-12 text-center text-slate-400 text-sm">
+                      No candidates match the selected filters.
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
+      {/* KANBAN BOARD VIEW (With Smooth Scrolling) */}
+      {viewMode === 'kanban' && (
+        <div className="overflow-x-auto pb-6">
+          <div className="flex gap-4 min-w-[1000px] items-start">
+            {STAGES.map((stage) => {
+              const stageCandidates = filteredApplicants.filter(a => a.status === stage);
+
+              return (
+                <div
+                  key={stage}
+                  onDragOver={handleDragOver}
+                  onDrop={(e) => handleDrop(e, stage)}
+                  className="flex-1 bg-slate-50/60 rounded-2xl border border-slate-200 flex flex-col min-w-[190px]"
+                >
+                  {/* Clean Column Header */}
+                  <div className="p-3.5 rounded-t-2xl border-b border-slate-200 bg-white flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <span className="font-extrabold text-xs uppercase tracking-wider text-slate-900">{stage}</span>
+                      <span className="w-5 h-5 rounded-full bg-slate-900 text-white text-xs font-bold flex items-center justify-center shadow-2xs">
+                        {stageCandidates.length}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Cards Container */}
+                  <div className="p-3 overflow-y-auto flex-1 space-y-3">
+                    {stageCandidates.map((cand) => (
+                      <div
+                        key={cand.id}
+                        draggable
+                        onDragStart={(e) => handleDragStart(e, cand.id)}
+                        onClick={() => setCandidateModal(cand)}
+                        className="bg-white p-4 rounded-xl border border-slate-200 shadow-2xs hover:shadow-md hover:border-slate-300 transition-all cursor-grab active:cursor-grabbing group flex flex-col justify-between"
+                      >
+                        <div>
+                          <div className="flex items-start justify-between gap-1.5">
+                            <div>
+                              <h4 className="font-extrabold text-xs text-slate-900 group-hover:text-slate-700 transition-colors leading-snug">
+                                {cand.name}
+                              </h4>
+                              <span className="text-[11px] text-slate-400 font-mono">{cand.jobId}</span>
+                            </div>
+                            <span className="text-[11px] font-bold px-2 py-0.2 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200">
+                              {cand.matchScore}%
+                            </span>
+                          </div>
+
+                          <p className="text-xs text-slate-700 font-semibold mt-2.5 p-2 rounded-lg bg-slate-50 border border-slate-200/70 line-clamp-2">
+                            {cand.degree}
+                          </p>
+
+                          <div className="mt-2.5 pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500 font-medium">
+                            <span>{cand.experienceYears} Yrs</span>
+                            <span className="font-extrabold text-slate-900">{cand.expectedHourlyRate}/hr</span>
+                          </div>
+                        </div>
+
+                        {/* Quick stage advance buttons */}
+                        <div className="mt-2.5 pt-2 border-t border-slate-100 flex items-center justify-between gap-1" onClick={(e) => e.stopPropagation()}>
+                          <span className="text-xs text-slate-400 font-medium">Stage:</span>
+                          <div className="flex items-center gap-1">
+                            {STAGES.indexOf(stage) > 0 && (
+                              <button
+                                onClick={() => handleStageChange(cand, STAGES[STAGES.indexOf(stage) - 1])}
+                                className="px-2 py-0.5 text-xs font-bold rounded bg-slate-100 hover:bg-slate-200 text-slate-800 transition-colors"
+                                title="Move back"
+                              >
+                                ←
+                              </button>
+                            )}
+                            {STAGES.indexOf(stage) < STAGES.length - 1 && (
+                              <button
+                                onClick={() => handleStageChange(cand, STAGES[STAGES.indexOf(stage) + 1])}
+                                className="px-2.5 py-0.5 text-xs font-bold rounded-lg bg-slate-900 hover:bg-slate-800 text-white flex items-center gap-1 shadow-2xs transition-colors"
+                              >
+                                Next →
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+
+                    {stageCandidates.length === 0 && (
+                      <div className="p-5 text-center text-xs text-slate-400 border border-dashed border-slate-300 rounded-xl bg-white/50">
+                        Drop candidate here
+                      </div>
+                    )}
                   </div>
                 </div>
-
-                {/* Cards Container */}
-                <div className="p-3.5 overflow-y-auto flex-1 space-y-3.5">
-                  {stageCandidates.map((cand) => (
-                    <div
-                      key={cand.id}
-                      draggable
-                      onDragStart={(e) => handleDragStart(e, cand.id)}
-                      onClick={() => setCandidateModal(cand)}
-                      className="bg-white p-5 rounded-2xl border border-slate-200 shadow-2xs hover:shadow-md hover:border-slate-300 transition-all cursor-grab active:cursor-grabbing group flex flex-col justify-between"
-                    >
-                      <div>
-                        <div className="flex items-start justify-between gap-2">
-                          <div>
-                            <h4 className="font-extrabold text-sm text-slate-900 group-hover:text-slate-700 transition-colors leading-snug">
-                              {cand.name}
-                            </h4>
-                            <span className="text-xs text-slate-400 font-mono">{cand.jobId}</span>
-                          </div>
-                          <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200">
-                            {cand.matchScore}% Match
-                          </span>
-                        </div>
-
-                        <p className="text-xs text-slate-700 font-semibold mt-3 p-2.5 rounded-xl bg-slate-50 border border-slate-200/70 leading-relaxed">
-                          {cand.degree}
-                        </p>
-
-                        <div className="mt-3.5 pt-2.5 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500 font-medium">
-                          <span>{cand.experienceYears} Years Exp</span>
-                          <span className="font-extrabold text-slate-900 text-sm">{cand.expectedHourlyRate}/hr</span>
-                        </div>
-                      </div>
-
-                      {/* Quick stage advance buttons */}
-                      <div className="mt-3.5 pt-3 border-t border-slate-100 flex items-center justify-between gap-2" onClick={(e) => e.stopPropagation()}>
-                        <span className="text-xs text-slate-400 font-medium">Stage:</span>
-                        <div className="flex items-center gap-1.5">
-                          {STAGES.indexOf(stage) > 0 && (
-                            <button
-                              onClick={() => handleStageChange(cand, STAGES[STAGES.indexOf(stage) - 1])}
-                              className="px-2.5 py-1 text-xs font-bold rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 transition-colors"
-                              title="Move back"
-                            >
-                              ←
-                            </button>
-                          )}
-                          {STAGES.indexOf(stage) < STAGES.length - 1 && (
-                            <button
-                              onClick={() => handleStageChange(cand, STAGES[STAGES.indexOf(stage) + 1])}
-                              className="px-3 py-1 text-xs font-bold rounded-lg bg-slate-900 hover:bg-slate-800 text-white flex items-center gap-1 shadow-2xs transition-colors"
-                            >
-                              Advance →
-                            </button>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-
-                  {stageCandidates.length === 0 && (
-                    <div className="p-6 text-center text-xs text-slate-400 border border-dashed border-slate-300 rounded-2xl bg-white/50">
-                      No candidates in {stage}
-                    </div>
-                  )}
-                </div>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Candidate Details Dossier Modal */}
       {candidateModal && (
