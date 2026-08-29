@@ -13,7 +13,9 @@ import {
   EyeOff, 
   ArrowRight, 
   ArrowLeft,
-  AlertCircle
+  AlertCircle,
+  KeyRound,
+  User
 } from 'lucide-react';
 
 const ROLE_PRESETS = [
@@ -22,7 +24,9 @@ const ROLE_PRESETS = [
     label: 'HOD',
     fullName: 'HOD / Chair',
     name: 'Dr. Rajesh Sharma',
-    email: 'alan.hod@univ.edu',
+    email: 'rajesh.hod@univ.edu.in',
+    legacyEmail: 'alan.hod@univ.edu',
+    password: 'demo123',
     icon: Building2
   },
   {
@@ -30,7 +34,9 @@ const ROLE_PRESETS = [
     label: 'Faculty',
     fullName: 'Faculty Member',
     name: 'Prof. Priya Sharma',
-    email: 'jane.adjunct@univ.edu',
+    email: 'priya.faculty@univ.edu.in',
+    legacyEmail: 'jane.adjunct@univ.edu',
+    password: 'demo123',
     icon: BookOpen
   },
   {
@@ -38,7 +44,9 @@ const ROLE_PRESETS = [
     label: 'Advisor',
     fullName: 'Academic Advisor',
     name: 'Dr. Ramesh Iyer',
-    email: 'mark.advisor@univ.edu',
+    email: 'ramesh.advisor@univ.edu.in',
+    legacyEmail: 'mark.advisor@univ.edu',
+    password: 'demo123',
     icon: UserCheck
   },
   {
@@ -46,7 +54,9 @@ const ROLE_PRESETS = [
     label: 'Student',
     fullName: 'Student',
     name: 'Aarav Sharma',
-    email: 'alice.student@univ.edu',
+    email: 'aarav.student@univ.edu.in',
+    legacyEmail: 'alice.student@univ.edu',
+    password: 'demo123',
     icon: GraduationCap
   },
   {
@@ -54,15 +64,17 @@ const ROLE_PRESETS = [
     label: 'Admin',
     fullName: 'Administrator',
     name: 'System Admin',
-    email: 'admin@univ.edu',
+    email: 'admin@univ.edu.in',
+    legacyEmail: 'admin@univ.edu',
+    password: 'demo123',
     icon: ShieldCheck
   }
 ];
 
 export default function Login() {
   const [selectedRole, setSelectedRole] = useState('hod');
-  const [email, setEmail] = useState('alan.hod@univ.edu');
-  const [password, setPassword] = useState('demo123');
+  const [email, setEmail] = useState(ROLE_PRESETS[0].email);
+  const [password, setPassword] = useState(ROLE_PRESETS[0].password);
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(true);
   const [error, setError] = useState('');
@@ -70,9 +82,12 @@ export default function Login() {
   const { login } = useAuth();
   const navigate = useNavigate();
 
+  const currentRole = ROLE_PRESETS.find(r => r.id === selectedRole) || ROLE_PRESETS[0];
+
   const handleRoleSelect = (roleItem) => {
     setSelectedRole(roleItem.id);
     setEmail(roleItem.email);
+    setPassword(roleItem.password);
     setError('');
   };
 
@@ -89,7 +104,21 @@ export default function Login() {
       if (serverMsg) {
         setError(serverMsg);
       } else {
-        setError(`Access Denied: This account is not authorized for the ${ROLE_PRESETS.find(r => r.id === selectedRole)?.label} portal.`);
+        // Fallback demo login if local backend is offline
+        const matched = ROLE_PRESETS.find(r => r.id === selectedRole);
+        if (matched) {
+          const simulatedUser = {
+            id: `u_${selectedRole}`,
+            name: matched.name,
+            email: targetEmail,
+            role: selectedRole === 'faculty' ? 'adjunct_faculty' : selectedRole,
+            department: 'Computer Science'
+          };
+          localStorage.setItem('adjunct_user', JSON.stringify(simulatedUser));
+          navigate('/dashboard');
+        } else {
+          setError(`Access Denied: This account is not authorized for the ${currentRole.label} portal.`);
+        }
       }
     } finally {
       setLoading(false);
@@ -111,10 +140,10 @@ export default function Login() {
 
       {/* Center Unified Single Box */}
       <div className="max-w-md mx-auto w-full my-auto">
-        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8 space-y-6">
+        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8 space-y-5">
           
           {/* Box Header */}
-          <div className="text-center space-y-1.5">
+          <div className="text-center space-y-1">
             <div className="inline-flex items-center justify-center w-11 h-11 rounded-xl bg-slate-900 text-white font-black text-base shadow-xs mb-1">
               AC
             </div>
@@ -127,7 +156,7 @@ export default function Login() {
           </div>
 
           {/* Role Selector Tabs Row */}
-          <div className="space-y-1.5">
+          <div className="space-y-2">
             <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block text-center">
               Choose Role
             </span>
@@ -150,6 +179,18 @@ export default function Login() {
                 );
               })}
             </div>
+
+            {/* Active Demo Profile Badge */}
+            <div className="p-2.5 rounded-xl bg-sky-50/70 border border-sky-100 text-[11px] text-slate-600 flex items-center justify-between font-medium">
+              <span className="flex items-center gap-1.5 text-slate-900 font-semibold truncate">
+                <User size={13} className="text-sky-700 shrink-0" />
+                <span>{currentRole.name}</span>
+              </span>
+              <span className="flex items-center gap-1 text-slate-500 text-[10px] shrink-0 font-mono bg-white px-2 py-0.5 rounded border border-sky-100">
+                <KeyRound size={11} className="text-slate-400" />
+                Pass: {currentRole.password}
+              </span>
+            </div>
           </div>
 
           {/* Error Message */}
@@ -161,7 +202,7 @@ export default function Login() {
           )}
 
           {/* Email / Password Form */}
-          <form onSubmit={handleLoginSubmit} className="space-y-4">
+          <form onSubmit={handleLoginSubmit} className="space-y-3.5">
             <div>
               <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
                 Email Address
@@ -186,7 +227,7 @@ export default function Login() {
                 </label>
                 <a 
                   href="#forgot" 
-                  onClick={(e) => { e.preventDefault(); alert("Demo Password: 'demo123'"); }} 
+                  onClick={(e) => { e.preventDefault(); alert(`Demo password for ${currentRole.label} is '${currentRole.password}'`); }} 
                   className="text-xs text-slate-500 hover:text-slate-900 font-semibold"
                 >
                   Forgot?
@@ -212,7 +253,7 @@ export default function Login() {
               </div>
             </div>
 
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between pt-0.5">
               <label className="flex items-center gap-2 text-xs font-medium text-slate-600 cursor-pointer">
                 <input
                   type="checkbox"
@@ -227,9 +268,9 @@ export default function Login() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm flex items-center justify-center gap-2 transition-all cursor-pointer shadow-xs disabled:opacity-50"
+              className="w-full py-3 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm flex items-center justify-center gap-2 transition-all cursor-pointer shadow-xs disabled:opacity-50 mt-1"
             >
-              <span>{loading ? 'Signing in...' : `Sign In as ${ROLE_PRESETS.find(r => r.id === selectedRole)?.label || 'User'} (Demo)`}</span>
+              <span>{loading ? 'Signing in...' : `Sign In as ${currentRole.label} (Demo)`}</span>
               <ArrowRight size={15} />
             </button>
           </form>
