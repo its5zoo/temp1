@@ -110,7 +110,7 @@ export default function StudentHome({ isEmpty, userName }: { isEmpty: boolean, u
               <div className="space-y-3">
                 <ActionItem 
                   title="Fee Payment Overdue" 
-                  subtitle="$25,000 outstanding balance"
+                  subtitle="₹25,000 outstanding balance"
                   type="danger"
                   action="Pay Now"
                 />

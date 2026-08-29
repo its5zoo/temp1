@@ -40,7 +40,7 @@ export default function RecruitmentPipelineTab({ recruitmentData, onRefresh }) {
     title: '',
     department: 'Computer Science',
     positions: 1,
-    hourlyRate: '$75 - $95 / hr',
+    hourlyRate: '₹2,500 - ₹3,500 / hr',
     urgency: 'High'
   });
 
@@ -77,7 +77,7 @@ export default function RecruitmentPipelineTab({ recruitmentData, onRefresh }) {
         title: '',
         department: 'Computer Science',
         positions: 1,
-        hourlyRate: '$75 - $95 / hr',
+        hourlyRate: '₹2,500 - ₹3,500 / hr',
         urgency: 'High'
       });
       if (onRefresh) onRefresh();
