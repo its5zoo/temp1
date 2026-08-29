@@ -19,7 +19,8 @@ import {
   GraduationCap,
   Users,
   Calendar,
-  FileText
+  FileSpreadsheet,
+  Download
 } from 'lucide-react';
 import { updateApplicantStatus, createJobRequisition } from '../../services/api';
 
@@ -95,6 +96,53 @@ export default function RecruitmentPipelineTab({ recruitmentData, onRefresh }) {
     return matchesSearch && matchesReq && matchesStage;
   });
 
+  // Export to Excel / CSV Utility
+  const handleExportExcel = () => {
+    if (filteredApplicants.length === 0) {
+      showToast('Export Notice', 'No candidate records to export with current filters.');
+      return;
+    }
+
+    const headers = [
+      'Candidate ID',
+      'Candidate Name',
+      'Email Address',
+      'Phone Number',
+      'Job Requisition',
+      'Academic Degree & Institution',
+      'Experience (Years)',
+      'Expected Hourly Rate',
+      'Match Score (%)',
+      'Current Pipeline Stage',
+      'Search Committee Evaluation'
+    ];
+
+    const rows = filteredApplicants.map(a => [
+      `"${a.id || ''}"`,
+      `"${a.name || ''}"`,
+      `"${a.email || ''}"`,
+      `"${a.phone || 'N/A'}"`,
+      `"${a.jobId || ''}"`,
+      `"${(a.degree || '').replace(/"/g, '""')}"`,
+      `"${a.experienceYears || 0}"`,
+      `"${a.expectedHourlyRate || ''}"`,
+      `"${a.matchScore || 0}%"`,
+      `"${a.status || ''}"`,
+      `"${(a.notes || 'Vetted by Search Committee').replace(/"/g, '""')}"`
+    ]);
+
+    const csvContent = 'data:text/csv;charset=utf-8,\uFEFF' + [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement('a');
+    link.setAttribute('href', encodedUri);
+    link.setAttribute('download', `Faculty_Recruitment_ATS_${new Date().toISOString().split('T')[0]}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    showToast('Excel Sheet Exported', `Downloaded ${filteredApplicants.length} candidate records as spreadsheet.`);
+  };
+
   const inInterviewCount = applicants.filter(a => a.status === 'Interview').length;
   const selectedCount = applicants.filter(a => a.status === 'Selected').length;
   const totalOpenings = requisitions.reduce((sum, r) => sum + (r.positions || 1), 0);
@@ -128,13 +176,25 @@ export default function RecruitmentPipelineTab({ recruitmentData, onRefresh }) {
           </p>
         </div>
 
-        <button
-          onClick={() => setNewReqModalOpen(true)}
-          className="px-5 py-2.5 text-sm font-bold bg-slate-900 hover:bg-slate-800 text-white rounded-xl shadow-xs flex items-center gap-2 transition-all cursor-pointer self-start md:self-auto"
-        >
-          <Plus size={16} />
-          Create Job Requisition
-        </button>
+        <div className="flex flex-wrap items-center gap-3 self-start md:self-auto">
+          {/* Export Excel Button */}
+          <button
+            onClick={handleExportExcel}
+            className="px-4 py-2.5 text-sm font-bold bg-white hover:bg-slate-50 border border-slate-200 text-slate-800 rounded-xl shadow-2xs flex items-center gap-2 transition-all cursor-pointer"
+            title="Download Candidate Records as Excel CSV"
+          >
+            <FileSpreadsheet size={16} className="text-emerald-600" />
+            <span>Export Excel Sheet</span>
+          </button>
+
+          <button
+            onClick={() => setNewReqModalOpen(true)}
+            className="px-5 py-2.5 text-sm font-bold bg-slate-900 hover:bg-slate-800 text-white rounded-xl shadow-xs flex items-center gap-2 transition-all cursor-pointer"
+          >
+            <Plus size={16} />
+            Create Job Requisition
+          </button>
+        </div>
       </div>
 
       {/* 4-Metric Executive Overview Grid */}
@@ -261,6 +321,15 @@ export default function RecruitmentPipelineTab({ recruitmentData, onRefresh }) {
             <option value="all">All Pipeline Stages</option>
             {STAGES.map(s => <option key={s} value={s}>{s}</option>)}
           </select>
+
+          <button
+            onClick={handleExportExcel}
+            className="p-2 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-xl border border-slate-200 flex items-center gap-1.5 text-xs font-bold transition-all cursor-pointer"
+            title="Export Excel Sheet"
+          >
+            <Download size={14} />
+            CSV/Excel
+          </button>
 
           <span className="font-bold text-slate-900 bg-slate-100 px-3 py-2 rounded-xl border border-slate-200 text-xs">
             {filteredApplicants.length} Candidates
@@ -424,7 +493,7 @@ export default function RecruitmentPipelineTab({ recruitmentData, onRefresh }) {
               </div>
 
               <div>
-                <span className="font-bold text-slate-700 uppercase text-xs block mb-1.5">Update Stage Directly</span>
+                <span className="font-bold text-slate-700 uppercase text-xs block mb-1.5">Direct Stage Transition</span>
                 <div className="flex flex-wrap gap-2">
                   {STAGES.map((s) => (
                     <button
