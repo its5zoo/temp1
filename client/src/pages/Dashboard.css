@@ -1,0 +1,29 @@
+.dashboard-layout { display: flex; min-height: 100vh; background: #f8fafc; }
+.dashboard-main { margin-left: 240px; flex: 1; padding: 32px; }
+
+/* Shared Dashboard Styles */
+.dashboard-content { max-width: 1200px; margin: 0 auto; }
+.dashboard-header { margin-bottom: 28px; }
+.dashboard-header h1 { font-size: 28px; font-weight: 800; color: #0f172a; }
+.dashboard-header p { color: #64748b; margin-top: 4px; }
+.kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 28px; }
+.card { background: white; border: 1px solid #e2e8f0; border-radius: 14px; padding: 20px 24px; margin-bottom: 24px; }
+.card h3 { font-size: 17px; font-weight: 700; color: #0f172a; margin-bottom: 16px; }
+.two-col-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.course-item { display: flex; justify-content: space-between; align-items: center; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px 14px; margin-bottom: 8px; font-size: 14px; }
+.badge { padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+.badge.purple { background: #ede9fe; color: #6d28d9; }
+.badge.green { background: #d1fae5; color: #065f46; }
+.loading { display: flex; align-items: center; justify-content: center; min-height: 60vh; color: #64748b; font-size: 16px; animation: pulse 1.5s ease-in-out infinite; }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+.attendance-card.at-risk { border-left: 4px solid #ef4444; }
+.attendance-card.good { border-left: 4px solid #10b981; }
+.meter-row { display: flex; align-items: center; gap: 16px; margin: 12px 0; }
+.meter-bar { flex: 1; height: 12px; background: #e2e8f0; border-radius: 99px; overflow: hidden; }
+.meter-fill { height: 100%; border-radius: 99px; transition: width 0.5s ease; }
+.fill-red { background: #ef4444; }
+.fill-green { background: #10b981; }
+.meter-pct { font-weight: 800; font-size: 20px; color: #0f172a; }
+.risk-alert { background: #fff1f2; border-radius: 10px; padding: 14px 16px; color: #be123c; font-size: 14px; }
+.safe-alert { background: #f0fdf4; border-radius: 10px; padding: 14px 16px; color: #15803d; font-size: 14px; }
+.roster-card { padding: 0; overflow: hidden; }
