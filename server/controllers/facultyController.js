@@ -1,14 +1,14 @@
-// In-memory Stateful Store for Faculty Teaching Portal (Prof. Priya Sharma)
+// In-memory Stateful Store for Adjunct Faculty Training Portal (Prof. Priya Sharma)
 
 const facultyProfile = {
   id: 'u_fac_1',
   name: 'Prof. Priya Sharma',
   email: 'priya.faculty@univ.edu.in',
-  role: 'Faculty / Associate Professor',
-  department: 'Computer Science & Engineering',
-  cabin: 'Academic Block B, Room 308',
-  experience: '9 Years',
-  rating: '4.85 / 5.0'
+  role: 'Adjunct Faculty (Visiting Industry Trainer)',
+  department: 'Computer Science & Engineering • Industry Training & Bootcamps',
+  cabin: 'Training Complex A, Room 204',
+  experience: '9 Years (Industry Fellow)',
+  rating: '4.85 / 5.0 (Training Feedback)'
 };
 
 const facultyKPIs = {

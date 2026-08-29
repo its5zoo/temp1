@@ -30,9 +30,9 @@ const ROLE_PRESETS = [
     icon: Building2
   },
   {
-    id: 'faculty',
-    label: 'Faculty',
-    fullName: 'Faculty Member',
+    id: 'adjunct_faculty',
+    label: 'Adjunct Faculty',
+    fullName: 'Adjunct Faculty (Visiting Trainer)',
     name: 'Prof. Priya Sharma',
     email: 'priya.faculty@univ.edu.in',
     legacyEmail: 'jane.adjunct@univ.edu',

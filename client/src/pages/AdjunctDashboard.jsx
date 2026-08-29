@@ -138,14 +138,14 @@ export default function AdjunctDashboard({ initialTab = 'dashboard' }) {
         <div>
           <div className="flex items-center gap-2">
             <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">
-              Faculty Teaching Portal
+              Adjunct Faculty & Training Portal
             </h1>
             <span className="px-2.5 py-0.5 rounded-md text-xs font-semibold bg-slate-100 text-slate-900 border border-slate-300">
-              Teaching & Curriculum Suite
+              Visiting Industry Fellow & Training Suite
             </span>
           </div>
           <p className="text-xs text-slate-500 mt-1">
-            Welcome back, <strong className="text-slate-900">{user?.name || 'Prof. Priya Sharma'}</strong>. Manage courses, timetable, daily attendance, student results & announcements.
+            Welcome back, <strong className="text-slate-900">{user?.name || 'Prof. Priya Sharma'}</strong>. Manage training modules, timetable, daily trainee attendance, assessment results & announcements.
           </p>
         </div>
 

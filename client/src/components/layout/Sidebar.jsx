@@ -267,7 +267,7 @@ export default function Sidebar() {
         <div className="user-info">
           <p className="user-name">{user?.name || 'User'}</p>
           <p className="user-role">
-            {isHOD ? 'Department Chair' : isAdvisor ? 'Academic Advisor' : isFaculty ? 'Associate Professor' : user?.role ? user.role.replace('_', ' ') : 'Faculty'}
+            {isHOD ? 'Department Chair' : isAdvisor ? 'Academic Advisor' : isFaculty ? 'Adjunct Faculty (Trainer)' : user?.role ? user.role.replace('_', ' ') : 'Faculty'}
           </p>
         </div>
         <button className="logout-btn" onClick={handleLogout} title="Logout">

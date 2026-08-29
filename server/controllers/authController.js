@@ -17,7 +17,7 @@ const ACADEMIC_PROFILES = [
     email: 'priya.faculty@univ.edu.in',
     legacyEmail: 'jane.adjunct@univ.edu',
     role: 'adjunct_faculty',
-    department: 'Computer Science',
+    department: 'Computer Science & Engineering (Executive & Industry Training)',
     avatar: 'PS'
   },
   {
