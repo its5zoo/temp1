@@ -9,7 +9,9 @@ import {
   RefreshCw,
   Building2,
   TrendingUp,
-  ShieldCheck
+  ShieldCheck,
+  Clock,
+  Briefcase
 } from 'lucide-react';
 
 export default function DepartmentKPIsTab({ overviewData, setActiveTab, onRefresh }) {
@@ -43,7 +45,7 @@ export default function DepartmentKPIsTab({ overviewData, setActiveTab, onRefres
             </h1>
           </div>
           <p className="text-sm text-slate-500 mt-1">
-            Chair: <strong className="text-slate-900">{department?.hodName || 'Dr. Alan Smith'}</strong> • Academic Period: <strong className="text-slate-900">{selectedSemester}</strong>
+            Department Head: <strong className="text-slate-900">{department?.hodName || 'Dr. Alan Smith'}</strong> • Semester: <strong className="text-slate-900">{selectedSemester}</strong>
           </p>
         </div>
 
@@ -53,7 +55,7 @@ export default function DepartmentKPIsTab({ overviewData, setActiveTab, onRefres
             onChange={(e) => setSelectedSemester(e.target.value)}
             className="bg-slate-50 text-slate-900 text-sm font-semibold border border-slate-200 rounded-xl px-4 py-2.5 outline-none focus:border-slate-900 cursor-pointer"
           >
-            <option value="Fall 2026">Fall 2026 (Active Term)</option>
+            <option value="Fall 2026">Fall 2026 (Current Term)</option>
             <option value="Spring 2026">Spring 2026</option>
             <option value="Fall 2025">Fall 2025</option>
           </select>
@@ -63,20 +65,20 @@ export default function DepartmentKPIsTab({ overviewData, setActiveTab, onRefres
             onChange={(e) => setSelectedDept(e.target.value)}
             className="bg-slate-50 text-slate-900 text-sm font-semibold border border-slate-200 rounded-xl px-4 py-2.5 outline-none focus:border-slate-900 cursor-pointer"
           >
-            <option value="all">All Specializations</option>
-            <option value="cs">Core Computer Science</option>
+            <option value="all">All Subjects</option>
+            <option value="cs">Computer Science</option>
             <option value="ai">AI & Data Science</option>
-            <option value="sec">Cybersecurity & Cloud</option>
+            <option value="sec">Cybersecurity</option>
           </select>
         </div>
       </div>
 
-      {/* 4 Primary KPI Metric Cards */}
+      {/* 4 Primary KPI Metric Cards with Easy Wording */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-        {/* Total Faculty */}
+        {/* Total Teachers */}
         <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-2xs hover:shadow-md hover:border-slate-300 transition-all flex flex-col justify-between">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Faculty Roster</span>
+            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Teachers</span>
             <div className="w-10 h-10 rounded-xl bg-slate-100 text-slate-900 border border-slate-200 flex items-center justify-center">
               <Users size={18} />
             </div>
@@ -84,19 +86,19 @@ export default function DepartmentKPIsTab({ overviewData, setActiveTab, onRefres
           <div className="mt-4">
             <div className="flex items-baseline gap-2.5">
               <span className="text-3xl font-black text-slate-900">{kpis?.totalFaculty || 18}</span>
-              <span className="text-xs font-bold text-slate-700 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded-md">+2 Term</span>
+              <span className="text-xs font-bold text-slate-700 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded-md">+2 New</span>
             </div>
             <div className="mt-4 flex items-center justify-between text-xs text-slate-500 pt-3 border-t border-slate-100 font-medium">
               <span><strong>{kpis?.fullTimeCount || 12}</strong> Full-Time</span>
-              <span><strong>{kpis?.adjunctCount || 6}</strong> Adjunct</span>
+              <span><strong>{kpis?.adjunctCount || 6}</strong> Part-Time</span>
             </div>
           </div>
         </div>
 
-        {/* Student Faculty Ratio */}
+        {/* Students per Teacher */}
         <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-2xs hover:shadow-md hover:border-slate-300 transition-all flex flex-col justify-between">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Student:Faculty</span>
+            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Students per Teacher</span>
             <div className="w-10 h-10 rounded-xl bg-slate-100 text-slate-900 border border-slate-200 flex items-center justify-center">
               <GraduationCap size={18} />
             </div>
@@ -107,16 +109,16 @@ export default function DepartmentKPIsTab({ overviewData, setActiveTab, onRefres
               <span className="text-xs font-bold text-slate-700 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded-md">480 Students</span>
             </div>
             <div className="mt-4 flex items-center justify-between text-xs text-slate-500 pt-3 border-t border-slate-100 font-medium">
-              <span>Target Benchmark: &lt; 30:1</span>
-              <span className="font-bold text-slate-900">Balanced</span>
+              <span>Standard Goal: Under 30:1</span>
+              <span className="font-bold text-slate-900">Good</span>
             </div>
           </div>
         </div>
 
-        {/* Teaching Satisfaction */}
+        {/* Teacher Ratings */}
         <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-2xs hover:shadow-md hover:border-slate-300 transition-all flex flex-col justify-between">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Avg Faculty Rating</span>
+            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Student Feedback Rating</span>
             <div className="w-10 h-10 rounded-xl bg-slate-100 text-slate-900 border border-slate-200 flex items-center justify-center">
               <Star size={18} />
             </div>
@@ -125,19 +127,19 @@ export default function DepartmentKPIsTab({ overviewData, setActiveTab, onRefres
             <div className="flex items-baseline gap-2">
               <span className="text-3xl font-black text-slate-900">{kpis?.avgTeachingRating || 4.72}</span>
               <span className="text-xs text-slate-400 font-medium">/ 5.0</span>
-              <span className="text-xs font-bold text-slate-700 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded-md ml-auto">94.2% Positive</span>
+              <span className="text-xs font-bold text-slate-700 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded-md ml-auto">94% Positive</span>
             </div>
             <div className="mt-4 flex items-center justify-between text-xs text-slate-500 pt-3 border-t border-slate-100 font-medium">
               <span>842 Student Reviews</span>
-              <span className="font-bold text-slate-900">98.2% SLA</span>
+              <span className="font-bold text-slate-900">Excellent</span>
             </div>
           </div>
         </div>
 
-        {/* Attention Flags */}
+        {/* Action Items / Alerts */}
         <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-2xs hover:shadow-md hover:border-slate-300 transition-all flex flex-col justify-between">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Attention Flags</span>
+            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Needs Attention</span>
             <div className="w-10 h-10 rounded-xl bg-slate-100 text-slate-900 border border-slate-200 flex items-center justify-center">
               <AlertTriangle size={18} />
             </div>
@@ -147,41 +149,41 @@ export default function DepartmentKPIsTab({ overviewData, setActiveTab, onRefres
               <span className="text-3xl font-black text-slate-900">
                 {(kpis?.overloadedFacultyCount || 0) + (kpis?.overloadedAdvisorsCount || 0)}
               </span>
-              <span className="text-xs font-bold text-rose-700 bg-rose-50 border border-rose-200 px-2 py-0.5 rounded-md">Action Required</span>
+              <span className="text-xs font-bold text-rose-700 bg-rose-50 border border-rose-200 px-2 py-0.5 rounded-md">Action Needed</span>
             </div>
             <div className="mt-4 flex items-center justify-between text-xs text-slate-500 pt-3 border-t border-slate-100 font-medium">
-              <span><strong>{kpis?.overloadedFacultyCount || 2}</strong> Faculty Overload</span>
-              <span><strong>{kpis?.overloadedAdvisorsCount || 1}</strong> Advisor Overload</span>
+              <span><strong>{kpis?.overloadedFacultyCount || 2}</strong> Overloaded Teachers</span>
+              <span><strong>{kpis?.overloadedAdvisorsCount || 1}</strong> Busy Advisor</span>
             </div>
           </div>
         </div>
       </div>
 
-      {/* 2-Column Split: Budget & Spend / Priorities Stream */}
+      {/* 2-Column Split: Budget & Hours / Important Alerts */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
-        {/* Adjunct Budget & Capacity Burn Card */}
+        {/* Department Budget & Teaching Hours Card with Super Easy Wording */}
         <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-2xs flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between pb-4 border-b border-slate-100">
               <div>
                 <h3 className="font-extrabold text-slate-900 text-sm flex items-center gap-2">
                   <DollarSign size={17} className="text-slate-800" />
-                  Adjunct Budget & Capacity Burn
+                  Budget & Teaching Hours
                 </h3>
-                <p className="text-xs text-slate-400 mt-0.5">Term financial spend against approved cap</p>
+                <p className="text-xs text-slate-400 mt-0.5">Money and class hours used this semester</p>
               </div>
               <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-slate-100 text-slate-900 border border-slate-200">
-                {budgetPercent}%
+                {budgetPercent}% Used
               </span>
             </div>
 
-            {/* Financial Meter */}
+            {/* Money Spent Section */}
             <div className="mt-5 space-y-5">
               <div>
                 <div className="flex justify-between text-xs font-semibold mb-2">
-                  <span className="text-slate-600">Fiscal Spend</span>
-                  <span className="text-slate-900 font-black">${budget.spent.toLocaleString()} / ${budget.allocated.toLocaleString()}</span>
+                  <span className="text-slate-600">Budget Spent</span>
+                  <span className="text-slate-900 font-black">${budget.spent.toLocaleString()} of ${budget.allocated.toLocaleString()}</span>
                 </div>
                 <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
                   <div 
@@ -190,16 +192,16 @@ export default function DepartmentKPIsTab({ overviewData, setActiveTab, onRefres
                   />
                 </div>
                 <div className="text-xs text-slate-400 mt-1.5 flex justify-between font-medium">
-                  <span>Remaining: ${(budget.allocated - budget.spent).toLocaleString()}</span>
-                  <span>Avg Rate: ${budget.adjunctHourlyRateAvg}/hr</span>
+                  <span>Money Left: ${(budget.allocated - budget.spent).toLocaleString()}</span>
+                  <span>Avg Pay: ${budget.adjunctHourlyRateAvg}/hr</span>
                 </div>
               </div>
 
-              {/* Teaching Hours */}
+              {/* Teaching Hours Section */}
               <div>
                 <div className="flex justify-between text-xs font-semibold mb-2">
-                  <span className="text-slate-600">Teaching Hours Logged</span>
-                  <span className="text-slate-900 font-black">{budget.hoursLoggedThisMonth} / {budget.hoursAllocatedCap} hrs</span>
+                  <span className="text-slate-600">Class Hours Taught</span>
+                  <span className="text-slate-900 font-black">{budget.hoursLoggedThisMonth} of {budget.hoursAllocatedCap} hrs</span>
                 </div>
                 <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
                   <div 
@@ -208,8 +210,8 @@ export default function DepartmentKPIsTab({ overviewData, setActiveTab, onRefres
                   />
                 </div>
                 <div className="text-xs text-slate-400 mt-1.5 flex justify-between font-medium">
-                  <span>Cap Buffer: {budget.hoursAllocatedCap - budget.hoursLoggedThisMonth} hrs</span>
-                  <span>{hoursPercent}% of term cap</span>
+                  <span>Hours Left: {budget.hoursAllocatedCap - budget.hoursLoggedThisMonth} hrs</span>
+                  <span>{hoursPercent}% of semester limit</span>
                 </div>
               </div>
             </div>
@@ -217,28 +219,28 @@ export default function DepartmentKPIsTab({ overviewData, setActiveTab, onRefres
 
           <div className="mt-6 pt-4 border-t border-slate-100 grid grid-cols-2 gap-3 text-center">
             <div className="p-3 rounded-xl bg-slate-50 border border-slate-200">
-              <span className="block text-xs text-slate-400 uppercase font-bold">In Onboarding</span>
-              <span className="text-base font-extrabold text-slate-900 mt-0.5 block">{kpis?.pendingOnboardingCount || 2}</span>
+              <span className="block text-xs text-slate-400 uppercase font-bold">New Teachers In Training</span>
+              <span className="text-base font-extrabold text-slate-900 mt-0.5 block">{kpis?.pendingOnboardingCount || 2} Teachers</span>
             </div>
             <div className="p-3 rounded-xl bg-slate-50 border border-slate-200">
-              <span className="block text-xs text-slate-400 uppercase font-bold">Job Requisitions</span>
-              <span className="text-base font-extrabold text-slate-900 mt-0.5 block">{kpis?.openJobRequisitionsCount || 3}</span>
+              <span className="block text-xs text-slate-400 uppercase font-bold">Open Hiring Posts</span>
+              <span className="text-base font-extrabold text-slate-900 mt-0.5 block">{kpis?.openJobRequisitionsCount || 3} Openings</span>
             </div>
           </div>
         </div>
 
-        {/* Priority Department Action Items */}
+        {/* Important Alerts & Decisions */}
         <div className="lg:col-span-2 bg-white rounded-2xl p-6 border border-slate-200 shadow-2xs flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between pb-4 border-b border-slate-100">
               <div>
                 <h3 className="font-extrabold text-slate-900 text-sm">
-                  Department Priority Decisions
+                  Important Alerts & Decisions
                 </h3>
-                <p className="text-xs text-slate-400 mt-0.5">Action items requiring chair authorization</p>
+                <p className="text-xs text-slate-400 mt-0.5">Things that need your review or approval</p>
               </div>
               <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-slate-100 text-slate-900 border border-slate-200">
-                {alerts?.length || 0} Decisions
+                {alerts?.length || 0} Alerts
               </span>
             </div>
 
@@ -258,7 +260,7 @@ export default function DepartmentKPIsTab({ overviewData, setActiveTab, onRefres
                       <p className="text-xs text-slate-600 mt-1 leading-relaxed">{alert.message}</p>
                       {alert.suggestedAction && (
                         <p className="text-xs text-slate-900 font-bold mt-1.5">
-                          Suggested Action: {alert.suggestedAction}
+                          Recommended: {alert.suggestedAction}
                         </p>
                       )}
                     </div>
@@ -269,7 +271,7 @@ export default function DepartmentKPIsTab({ overviewData, setActiveTab, onRefres
                       onClick={() => setActiveTab('workload')}
                       className="shrink-0 px-3.5 py-1.5 text-xs font-bold bg-white hover:bg-slate-100 border border-slate-200 text-slate-900 rounded-xl transition-all flex items-center gap-1 cursor-pointer shadow-2xs"
                     >
-                      Rebalance <ChevronRight size={13} />
+                      Balance Load <ChevronRight size={13} />
                     </button>
                   )}
                   {alert.category === 'advisory' && (
@@ -277,7 +279,7 @@ export default function DepartmentKPIsTab({ overviewData, setActiveTab, onRefres
                       onClick={() => setActiveTab('advisors')}
                       className="shrink-0 px-3.5 py-1.5 text-xs font-bold bg-white hover:bg-slate-100 border border-slate-200 text-slate-900 rounded-xl transition-all flex items-center gap-1 cursor-pointer shadow-2xs"
                     >
-                      Caseload <ChevronRight size={13} />
+                      View Advisors <ChevronRight size={13} />
                     </button>
                   )}
                   {alert.category === 'outcomes' && (
@@ -285,7 +287,7 @@ export default function DepartmentKPIsTab({ overviewData, setActiveTab, onRefres
                       onClick={() => setActiveTab('outcomes')}
                       className="shrink-0 px-3.5 py-1.5 text-xs font-bold bg-white hover:bg-slate-100 border border-slate-200 text-slate-900 rounded-xl transition-all flex items-center gap-1 cursor-pointer shadow-2xs"
                     >
-                      Review <ChevronRight size={13} />
+                      View Grades <ChevronRight size={13} />
                     </button>
                   )}
                 </div>
@@ -296,16 +298,16 @@ export default function DepartmentKPIsTab({ overviewData, setActiveTab, onRefres
           <div className="mt-5 pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400 font-medium">
             <span className="flex items-center gap-1.5">
               <ShieldCheck size={14} className="text-slate-500" />
-              Real-time anomaly monitoring enabled
+              Live system monitoring active
             </span>
             <span className="text-slate-900 font-bold cursor-pointer hover:underline flex items-center gap-1" onClick={onRefresh}>
-              <RefreshCw size={12} /> Sync Feed
+              <RefreshCw size={12} /> Refresh
             </span>
           </div>
         </div>
       </div>
 
-      {/* 3-Column Specialization Breakdown Grid */}
+      {/* 3-Column Subject Divisions Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
         <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-2xs flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -313,13 +315,13 @@ export default function DepartmentKPIsTab({ overviewData, setActiveTab, onRefres
               CS
             </div>
             <div>
-              <h4 className="text-sm font-extrabold text-slate-900">Core Computer Science</h4>
-              <p className="text-xs text-slate-500 font-medium mt-0.5">280 Enrolled • 10 Faculty</p>
+              <h4 className="text-sm font-extrabold text-slate-900">Computer Science</h4>
+              <p className="text-xs text-slate-500 font-medium mt-0.5">280 Students • 10 Teachers</p>
             </div>
           </div>
           <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-800 border border-slate-200">
             <span className="w-2 h-2 rounded-full bg-slate-900" />
-            Balanced
+            Normal
           </span>
         </div>
 
@@ -330,12 +332,12 @@ export default function DepartmentKPIsTab({ overviewData, setActiveTab, onRefres
             </div>
             <div>
               <h4 className="text-sm font-extrabold text-slate-900">AI & Data Science</h4>
-              <p className="text-xs text-slate-500 font-medium mt-0.5">120 Enrolled • 5 Faculty</p>
+              <p className="text-xs text-slate-500 font-medium mt-0.5">120 Students • 5 Teachers</p>
             </div>
           </div>
           <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-800 border border-slate-200">
             <span className="w-2 h-2 rounded-full bg-slate-900" />
-            Balanced
+            Normal
           </span>
         </div>
 
@@ -345,13 +347,13 @@ export default function DepartmentKPIsTab({ overviewData, setActiveTab, onRefres
               CY
             </div>
             <div>
-              <h4 className="text-sm font-extrabold text-slate-900">Cybersecurity & Cloud</h4>
-              <p className="text-xs text-slate-500 font-medium mt-0.5">80 Enrolled • 3 Faculty</p>
+              <h4 className="text-sm font-extrabold text-slate-900">Cybersecurity</h4>
+              <p className="text-xs text-slate-500 font-medium mt-0.5">80 Students • 3 Teachers</p>
             </div>
           </div>
           <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-800 border border-slate-200">
             <span className="w-2 h-2 rounded-full bg-slate-400" />
-            Recruiting
+            Hiring
           </span>
         </div>
       </div>
