@@ -43,21 +43,21 @@ export default function CareerPath({ isEmpty }: { isEmpty: boolean }) {
         
         {/* Left Column: Target & Summary */}
         <div className="space-y-6 lg:col-span-1">
-          <Card className="bg-indigo-950 text-white border-indigo-900">
+          <Card className="bg-sky-950 text-white border-sky-900">
             <CardContent className="p-6">
-              <div className="text-indigo-300 text-sm font-medium mb-1 uppercase tracking-wider">Target Role</div>
+              <div className="text-sky-300 text-sm font-medium mb-1 uppercase tracking-wider">Target Role</div>
               <h2 className="text-2xl font-bold mb-4">{careerGoal}</h2>
               <div className="space-y-4">
                 <div>
-                  <div className="flex justify-between text-xs mb-1 text-indigo-200">
+                  <div className="flex justify-between text-xs mb-1 text-sky-200">
                     <span>Overall Match</span>
                     <span>55%</span>
                   </div>
-                  <div className="w-full bg-indigo-900/50 rounded-full h-2">
-                    <div className="bg-lime-400 h-2 rounded-full" style={{ width: '55%' }} />
+                  <div className="w-full bg-sky-900/50 rounded-full h-2">
+                    <div className="bg-sky-400 h-2 rounded-full" style={{ width: '55%' }} />
                   </div>
                 </div>
-                <p className="text-xs text-indigo-200/70 leading-relaxed">
+                <p className="text-xs text-sky-200/70 leading-relaxed">
                   You have a strong foundation in mathematics, but you are missing key framework skills required for this role.
                 </p>
                 <button className="w-full py-2 bg-indigo-800 hover:bg-indigo-700 border border-indigo-600 rounded-lg text-sm font-medium transition-colors">

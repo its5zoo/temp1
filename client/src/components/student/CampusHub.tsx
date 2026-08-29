@@ -48,18 +48,18 @@ export default function CampusHub() {
             </CardContent>
           </Card>
 
-          <Card className="bg-indigo-950 text-white border-indigo-900">
+          <Card className="bg-sky-950 text-white border-sky-900">
             <CardContent className="p-6">
               <div className="flex items-center gap-3 mb-4">
-                <div className="bg-indigo-900 p-2 rounded-lg text-indigo-300">
+                <div className="bg-sky-900 p-2 rounded-lg text-sky-300">
                   <MessageSquare size={20} />
                 </div>
                 <div>
                   <h3 className="font-bold text-lg">Direct Messages</h3>
-                  <p className="text-indigo-200 text-sm">You have 2 unread messages from your advisor.</p>
+                  <p className="text-sky-200 text-sm">You have 2 unread messages from your advisor.</p>
                 </div>
               </div>
-              <button className="w-full py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-sm font-medium transition-colors shadow-sm">
+              <button className="w-full py-2 bg-sky-600 hover:bg-sky-500 text-white rounded-lg text-sm font-medium transition-colors shadow-sm">
                 Open Inbox
               </button>
             </CardContent>

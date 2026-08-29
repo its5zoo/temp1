@@ -139,17 +139,18 @@ export default function StudentHome({ isEmpty, userName }: { isEmpty: boolean, u
 
         {/* Sidebar */}
         <div className="space-y-6">
-          <Card className="bg-indigo-950 text-white shadow-sm border-indigo-900">
+          <Card className="bg-sky-950 text-white shadow-sm border-sky-900">
             <CardContent className="p-6">
-              <div className="bg-indigo-900/50 p-3 rounded-lg mb-4 text-indigo-300">
+              <div className="bg-sky-900/60 p-3 rounded-xl mb-4 text-sky-300 inline-flex items-center justify-center border border-sky-800/50">
                 <Lightbulb size={24} />
               </div>
-              <h3 className="font-bold text-lg mb-2">AI Academic Insights</h3>
-              <p className="text-indigo-200 text-sm mb-6 leading-relaxed">
+              <h3 className="font-bold text-lg mb-2 text-white">AI Academic Insights</h3>
+              <p className="text-sky-100 text-sm mb-6 leading-relaxed">
                 Based on your recent assessment in Linear Algebra, you are struggling with eigenvalue calculations.
               </p>
-              <button className="w-full flex items-center justify-between py-2.5 px-4 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-sm font-medium transition-colors">
-                Generate Practice Set <ArrowRight size={16} />
+              <button className="w-full flex items-center justify-between py-2.5 px-4 bg-sky-500 hover:bg-sky-400 text-slate-950 rounded-xl text-sm font-bold transition-all shadow-sm cursor-pointer">
+                <span>Generate Practice Set</span>
+                <ArrowRight size={16} />
               </button>
             </CardContent>
           </Card>
