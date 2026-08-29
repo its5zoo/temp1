@@ -15,7 +15,6 @@ import {
   ArrowLeft,
   AlertCircle
 } from 'lucide-react';
-import SmartIcon from '../components/common/SmartIcon';
 
 const ROLE_PRESETS = [
   {
@@ -95,12 +94,6 @@ export default function Login() {
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleQuickDemoClick = (roleItem) => {
-    setSelectedRole(roleItem.id);
-    setEmail(roleItem.email);
-    handleLoginSubmit(null, roleItem.email);
   };
 
   return (
@@ -244,40 +237,6 @@ export default function Login() {
               <ArrowRight size={15} />
             </button>
           </form>
-
-          {/* Quick Demo 1-Click Logins at Bottom */}
-          <div className="pt-5 border-t border-slate-100 space-y-2.5">
-            <div className="flex items-center justify-between text-xs text-slate-500 font-semibold">
-              <span className="flex items-center gap-1">
-                <SmartIcon size={14} className="text-slate-800" />
-                <span>1-Click Demo Logins</span>
-              </span>
-              <span className="text-[11px] text-slate-400">Click to enter</span>
-            </div>
-
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-              {ROLE_PRESETS.slice(0, 4).map((r) => (
-                <button
-                  key={r.id}
-                  type="button"
-                  onClick={() => handleQuickDemoClick(r)}
-                  className="p-2 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-left transition-all cursor-pointer"
-                >
-                  <span className="block text-[10px] font-bold text-slate-400 uppercase">{r.label}</span>
-                  <span className="block text-xs font-bold text-slate-900 truncate">{r.name.split(' ')[0]} {r.name.split(' ')[1] || ''}</span>
-                </button>
-              ))}
-
-              <button
-                type="button"
-                onClick={() => handleQuickDemoClick(ROLE_PRESETS[4])}
-                className="col-span-2 sm:col-span-1 p-2 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-left transition-all cursor-pointer"
-              >
-                <span className="block text-[10px] font-bold text-slate-400 uppercase">Admin</span>
-                <span className="block text-xs font-bold text-slate-900 truncate">System Admin</span>
-              </button>
-            </div>
-          </div>
 
         </div>
       </div>
